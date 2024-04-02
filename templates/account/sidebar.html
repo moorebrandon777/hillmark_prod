@@ -1,0 +1,140 @@
+{% load static %}
+
+
+<nav class="sidebar close">
+    <header>
+        <div class="image-text">
+            <span class="image">
+                <img src="{% static 'frontend/img/logo.png' %}" alt="logo">
+            </span>
+            <!-- <div class="header-logo">
+                    <img src="img/logo-new.png" alt="" class="long-logo">   
+            </div> -->
+            <div class="text header-text">
+                <span class="name">Hillmark Bank</span>  
+                <span class="profession">Offshore Banking</span>
+            </div>
+            
+        </div>
+        <i class="bx bx-chevron-right toggle"></i>
+    </header>
+    
+    <div class="menu-bar">
+        {% if not request.user.is_staff%}
+        <div class="menu">
+            <!-- <li class="search-box">
+                    <i class="bx bx-search icon"></i>
+                    <input type="search" placeholder="Search" class="">
+            </li> -->
+            
+            <ul class="menu-links px-0">
+                <li class="nav-links">
+                    <a href="{% url 'account:customer_dashboard' %}">
+                        <i class="bx bx-home-alt icon"></i>
+                        <span class="text nav-text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-links">
+                    <a href="{% url 'transactions:customer_transfer' %}">
+                        <i class="bx bx-transfer-alt icon"></i>
+                        <span class="text nav-text">Make Transfer</span>
+                    </a>
+                </li>
+                <li class="nav-links">
+                    <a href="{% url 'account:customer_transactions' %}">
+                        <i class="bx bx-bar-chart-alt-2 icon"></i>
+                        <span class="text nav-text">Statement</span>
+                    </a>
+                </li>
+                <li class="nav-links">
+                    <a href="{% url 'account:customer_care' %}">
+                        <i class="bx bx-envelope icon"></i>
+                        <span class="text nav-text">Customer Care</span>
+                    </a>
+                </li>
+                <li class="nav-links">
+                    <a href="{% url 'account:customer_ewallet' %}">
+                        <i class="bx bx-wallet icon"></i>
+                        <span class="text nav-text">E-Wallet</span>
+                    </a>
+                </li>
+                <li class="nav-links">
+                    <a href="{% url 'account:customer_settings' %}">
+                        <i class="bx bx-cog icon"></i>
+                        <span class="text nav-text">Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        {% else %}
+        <div class="menu">
+            <!-- <li class="search-box">
+                    <i class="bx bx-search icon"></i>
+                    <input type="search" placeholder="Search" class="">
+            </li> -->
+            
+            <ul class="menu-links px-0">
+                <li class="nav-links">
+                    <a href="{% url 'account:admin_dashboard' %}">
+                        <i class="bx bx-home-alt icon"></i>
+                        <span class="text nav-text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-links">
+                    <a href="{% url 'transactions:all_transactions' %}">
+                        <i class="bx bx-bar-chart-alt-2 icon"></i>
+                        <span class="text nav-text">Transactions</span>
+                    </a>
+                </li>
+                <li class="nav-links">
+                    <a href="{% url 'transactions:deposit_money' %}">
+                        <i class="bx bx-credit-card icon"></i>
+                        <span class="text nav-text">Fund Customer</span>
+                    </a>
+                </li>
+                <li class="nav-links">
+                    <a href="{% url 'transactions:withdraw_money' %}">
+                        <i class="bx bx-message-x icon"></i>
+                        <span class="text nav-text">Debit Customer</span>
+                    </a>
+                </li>
+                <!-- <li class="nav-links">
+                    <a href="">
+                        <i class="bx bx-heart icon"></i>
+                        <span class="text nav-text">Details</span>
+                    </a>
+                </li> -->
+                <li class="nav-links">
+                    <a href="">
+                        <i class="bx bx-cog icon"></i>
+                        <span class="text nav-text">Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        {% endif %}  
+
+        <div class="bottom-content">
+            <li class="">
+                <!-- <a href="" class="btn btn-danger "> -->
+                <a href="{% url 'account:logout' %}">
+                    <i class="bx bx-log-out icon "></i>
+                    <span class="text nav-text">Logout</span>
+                </a>
+            </li>
+            <li class="mode">
+                <div class="moon-sun">
+                    <i class="bx bx-moon icon moon"></i>
+                    <i class="bx bx-sun icon sun"></i>
+                </div>
+                <span class="mode-text text">
+                    Dark Mode
+                </span>
+                <div class="toggle-switch">
+                    <span class="switch"></span>
+                </div>
+            </li>
+        </div>
+    </div> 
+     
+</nav>

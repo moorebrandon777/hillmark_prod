@@ -1,0 +1,159 @@
+{% extends '../base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<div class="container py-5">
+    <h3 class="text-center card-text mb-5">{{customer.get_full_name}}'s More Details</h3>
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{message}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    {% endif %}
+    <div class="row">
+        <div class="col-md-5 mb-4 mb-sm-0">
+            <div class="card shadow bg-white">
+                <div class="card-body">
+                    <h4 class="text-center detail-text mb-2" style="font-size: 20px;">Customer Info</h4>
+                    <div class="row my-3 pt-1">
+                        <div class="col-md-5 mb-3">
+                            <img src="{{account.picture.url}}" alt="" class="img-fluid mt-3 d-none d-md-block" style="width: 100px; height: 100px; border-radius: 50%;">
+                            <center>
+                                <img src="{{account.picture.url}}" alt="" class="img-fluid d-md-none" style="width: 150px; height: 150px; border-radius: 50%;">
+                            </center> 
+                        </div>
+                        <hr class="d-sm-none">
+                        <div class="col-md-7">
+                            <p class="details-text mb-2"><strong>Name:</strong> {{customer.get_full_name}}</p>
+                            <p class="details-text mb-2"><strong>Country:</strong> {{account.country}}</p>
+                            <p class="details-text mb-2"><strong>Email:</strong> {{customer.email}}</p>
+                            <p class="details-text mb-2"><strong>Address:</strong> {{account.street_address}}</p>
+                            <p class="details-text mb-2"><strong>Status:</strong>
+                                {% if not customer.is_activated %}
+                                <strong class="text-danger"> Deactivated</strong>
+                                {% else %}
+                                <strong class="text-success"> Activated</strong>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div> 
+                    {% if not customer.is_activated %}
+                    <a href="{% url 'account:activate_customer' customer.pk %}" class="btn btn-primary fw-bold w-100 btn-sm mb-3">Activate Account</a>  
+                    {% else %}
+                    <a href="{% url 'account:activate_customer' customer.pk %}" class="btn btn-danger fw-bold w-100 btn-sm mb-3">Deactivate Account</a> 
+                    {% endif %}
+                    <a href="{% url 'account:update_customer' customer.pk %}" class="btn btn-secondary fw-bold w-100 btn-sm">Update Account Info</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+        <div class="col-md-5">
+            <div class="card shadow bg-white">
+                <div class="card-body">
+                    <h4 class="text-center detail-text mb-3" style="font-size: 20px;">Bank Account Info</h4>
+
+                    <p class="details-text mb-2"><strong>Account Number:</strong> {{account.account_no}}</p>
+                    <p class="details-text mb-2"><strong>Account Type:</strong> {{account.account_type}}</p>
+                    <!-- <p class="details-text mb-2"><strong>Currency:</strong> {{account.currency}}</p> -->
+                    <p class="details-text mb-2"><strong>Balance:</strong> {{account.currency}}{{account.balance|intcomma}}</p>
+                    <p class="details-text mb-2"><strong>Pin:</strong> {{account.transfer_pin}}</p>
+                    <!-- <p class="details-text mb-2"><strong>Last Login:</strong> {{customer.last_login}}</p> -->
+                    <p class="details-text mb-4"><strong>Transaction Status:</strong>
+                        {% if account.is_success %}
+                        <strong class="text-success">Transactions will succeed</strong>
+                        {% else %}
+                        <strong class="text-danger"> Transactions will Fail</strong>
+                        {% endif %}
+                    </p>
+                    {% if account.is_success %}
+                    <a href="{% url 'account:activate_transaction_status' customer.pk %}" class="btn btn-danger fw-bold w-100 btn-sm mb-3 mt-1">Make Transactions To Fail</a>  
+                    {% else %}
+                    <a href="{% url 'account:activate_transaction_status' customer.pk %}" class="btn btn-primary fw-bold w-100 btn-sm mb-3 mt-1">Make Transactions Successful</a> 
+                    {% endif %}
+                    
+                    
+                    <a href="" class="btn btn-secondary fw-bold w-100 btn-sm" data-bs-toggle="modal" data-bs-target="#change-password">Change Customer Password</a>  
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center align-item-center">
+        <h2 class="text-center card-text">{{customer.get_full_name}}'s Transactions</h2>
+        <div class="table-responsive ">
+            <table class="table table-condensed">
+                <thead>
+                  <tr>
+                    <th scope="col">Ref Number</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Transaction Date</th>
+                    <th scope="col">Account Holder</th>
+                    <th scope="col">Beneficiary Name</th>
+                    <th scope="col">Beneficiary Bank</th>
+                    <th scope="col">Beneficiary Account</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Status</th>
+                    
+                    
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                {% for transaction in transactions%}
+                  <tr>
+                    <td>{{transaction.ref_code}}</td>
+                    <td>{{transaction.transaction_type}}</td>
+                    <td>{{transaction.transaction_date}} {{transaction.transaction_time}}</td>
+                    <td>{{transaction.account.user.get_full_name}}</td>
+                    <td>{{transaction.beneficiary_name}}</td>
+                    <td>{{transaction.beneficiary_bank}}</td>
+                    <td>{{transaction.beneficiary_account}}</td>
+                    <td>{{transaction.currency}} {{transaction.amount}}</td>
+                    <td {% if transaction.status == 'Successful' %} class="text-success" {% else %}class="text-danger"{% endif %}><strong>{{transaction.status}}</strong></td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- change password modal -->
+  
+  <!-- Modal -->
+<div class="modal fade" id="change-password" tabindex="-1" aria-labelledby="change-passwordLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="change-passwordLabel">Change password for {{customer.get_full_name}}</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form action="{% url 'account:admin_change_customer_password' customer.pk %}" method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <input type="password" name="password1" class="form-control" id="passowrd1" placeholder="New Password">
+                </div>
+                <div class="mb-3">
+                    <input type="password" name="password2" class="form-control" id="passowrd2" placeholder="Repeat New Password">
+                </div>
+                <div class="modal-footer">
+                    <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+                    <button type="submit" class="btn btn-info w-100 fw-bold text-white">Save changes</button>
+                </div>
+            </form>
+        </div>
+        
+      </div>
+    </div>
+</div>
+
+{% endblock %}

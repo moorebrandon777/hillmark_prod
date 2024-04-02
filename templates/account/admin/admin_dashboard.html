@@ -1,0 +1,64 @@
+{% extends '../base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+
+<div class="container py-5">
+    <div class="row justify-content-center align-item-center">
+        <h2 class="text-center card-text">Account Holders</h2>
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{message}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        {% endif %}
+        <div class="table-responsive ">
+            <table class="table table-condensed">
+                <thead>
+                  <tr>
+                    <th scope="col">Full Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Cur</th>
+                    <th scope="col">Account Number</th>
+                    <th scope="col">Account Type</th>
+                    <th scope="col">Country</th>
+                    <th scope="col">Balance</th>
+                    <th scope="col">Date Created</th>
+                    <th scope="col">Status</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    
+                    
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for customer in customers %}
+                  <tr>
+                    <td>{{customer.get_full_name}}</td>
+                    <td>{{customer.email}}</td>
+                    <td>{{customer.account.currency}}</td>
+                    <td>{{customer.account_number}}</td>
+                    <td>{{customer.account.account_type}}</td>
+                    <td>{{customer.account.country}}</td>
+                    <td>{{customer.account.currency}}{{customer.account.balance|intcomma}}</td>
+                    <td>{{customer.date_created}}</td>
+                    {% if customer.is_activated %}
+                    <td class="text-success"><strong>Activated</strong></td>
+                    {% else %}
+                    <td class="text-danger"><strong>Deactivated</strong></td>
+                    {% endif %}
+                    <td class="pt-1"><a href="{% url 'account:admin_customer_detail' customer.pk %}" class="btn btn-sm btn-primary fw-bold" style="font-size: 11px !important;">More Details</a></td>  
+                    <td class="pt-1"><a href="{% url 'account:admin_delete_customer' customer.pk %}" class="btn btn-sm btn-danger fw-bold" style="font-size: 11px !important;">Delete</a></td>  
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

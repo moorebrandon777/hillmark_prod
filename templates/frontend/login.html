@@ -1,0 +1,50 @@
+{% extends './base.html' %}
+
+{% load static%}
+
+{% block content %}
+
+
+<section id="login-form">
+    <div class="container py-5">
+      <div class="row justify-content-center align-item-center pt-5">
+        <div class="col-md-5">
+          <div class="card shadow rounded">
+            <center>
+              <img src="{% static 'frontend/img/logo-new.png' %}" alt="" style="width: 300px; padding: 30px 0;">
+            </center>
+            
+            <div class="card-body mx-3">
+              <h3 class="mb-3">Sign In</h3>
+              {% if messages %}
+                {% for message in messages %}
+                  <div class="alert alert-success alert-dismissible fade show" role="alert">
+                      {{message}}
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+                {% endfor %}
+              {% endif %}
+              <hr>
+
+              <form action="." method="POST">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                  {{ field.label_tag }} 
+                    {{ field }}
+                    {% if field.errors %}
+                      <small>{{ field.errors|striptags }}</small> 
+                  {% endif %}
+                {% endfor %}
+                <div class="mb-3">
+                  <input type="submit" value="Sign In" class="btn btn-brand w-100 fw-bold">
+                </div> 
+              </form>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock%}

@@ -1,0 +1,63 @@
+{% load static %}
+
+<!-- TOP NAV -->
+<div class="top-nav">
+    <div class="container">
+        <div class="row justify-content-between top-nav-content">
+            <div class="col-auto">
+              <a href="{% url 'frontend:home' %}"><img src="{% static 'frontend/img/logo-new.png' %}" alt="" class="logo"></a>   
+            </div>
+            
+            <div class="col-auto">
+                <!-- <p class=""><i class="bi bi-geo-alt me-2"></i> thr johnson street odiegwu lagos state abuja</p> -->
+                <p><i class="bi bi-envelope me-2"></i> contact@hillmarkonlinetrans.com</p> 
+            </div>
+            <div class="col-auto pt-2">
+              <div id="google_translate_element"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- top nav end -->
+
+<!-- navbar -->
+<nav class="navbar navbar-expand-lg nav-bar-bg shadow sticky-top">
+    <div class="container">
+      <!-- <a class="navbar-brand" href="#">Navbar</a> -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <!-- <span class="navbar-toggler-icon"></span> -->
+        <i class="bi bi-list" style="font-size: 30px; color: #fff;"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="#services">Personal</a>
+          </li>
+          <!-- <li class="nav-item">
+            <a class="nav-link" href="#services">Banking</a>
+          </li> -->
+          <li class="nav-item">
+            <a class="nav-link" href="#services">Lending</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#services">Services</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'frontend:about_us' %}">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#how-do">Credit</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'frontend:contact_us' %}">Contact</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'frontend:register' %}">Open an Account <i class="bi bi-chevron-right"></i></a>
+          </li>
+        </ul>
+        <div class="phone text-white">
+            <a class="btn btn-brand w-100 fw-bold rounded-pill px-5" href="{% url 'frontend:login' %}">Sign In</a>
+        </div>
+      </div>
+    </div>
+  </nav>

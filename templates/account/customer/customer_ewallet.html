@@ -1,0 +1,30 @@
+{% extends '../base.html' %}
+
+{% load static%}
+
+{% block content %}
+
+
+<section id="login-form">
+    <div class="container py-5">
+      <div class="row justify-content-center align-item-center">
+        <div class="col-md-6">
+          <div class="card shadow rounded">
+            <center>
+                <i class="bx bx-alarm-exclamation icon" style="font-size: 200px; color: rgb(236, 91, 91);"></i>
+            </center>
+            <div class="card-body mx-3">
+              <h3 class="mb-3 text-danger text-center">E-Wallet Alert</h3>
+              <hr>
+              <p class="card-text text-center"><strong>Dear Customer,</strong> <br> You are not subscribed to this service, please contact customer care for more information</p>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+{% endblock%}

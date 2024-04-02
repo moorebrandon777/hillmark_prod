@@ -1,0 +1,122 @@
+{% extends './base.html' %}
+
+{% load static%}
+
+{% block content %}
+
+
+<!-- hero section -->
+<section id="about-hero">
+    <div class="container-fluid">
+        <div class="row justify-content-center align-item-center">
+            <div class="col-md-6 text-center hero-content">
+                <h2>Delivering the Utmost in Customer Service</h2>
+                <p>We are synonymous with innovation, building excellence, superior financial performance and creating role models for society.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- vision mission -->
+<section id="vision-mission">
+    <div class="container py-5">
+        <div class="row pt-4">
+            <div class="col-md-6">
+                <h2>Vision</h2>
+                <p class="mb-3">To become the leading world, technology-driven, global financial institution that provides distinctive range of financial services.</p>
+                <h2>Mision</h2>
+                <p class="mb-3">To build the hillmark brand into a reputable international financial institution recognized for innovation, superior performance and creation of premium value for all stakeholders</p>
+                <h2 class="">Core Values</h2>
+                <p>To build the hillmark brand into a reputable international financial institution recognized for innovation, superior performance and creation of premium value for all stakeholders</p>
+            </div>
+            <div class="col-md-6">
+                <img src="{% static 'frontend/img/about-hero.jpg' %}" alt="" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- more about -->
+<section id="about">
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-md-8">
+                <h2>People, Technology, Service</h3>
+                <p>Hillmark Bank Plc blazed the trail in digital banking in the world; scoring several firsts in the deployment of Information and Communication Technology (ICT) infrastructure to create innovative products that meet the needs of its teeming customers.</p>
+                <p>The bank is verifiably a leader in the deployment of various channels of banking technology, and the Hillmark brand has become synonymous with the deployment of state-of-the-art technologies in banking. Driven by a culture of excellence and strict adherence to global best practices, the Bank has combined vision, skillful banking expertise, and cutting-edge technology to create products and services that anticipate and meet customer's expectations; enable businesses to thrive and grow wealth for customers.</p>
+                
+                <p>The Hillmark Bank vision is to become a Platform for Enriching Lives by building strong, value adding relationships with customers, stakeholders and the communities in which it operates. In line with this vision, we are constantly pioneering ground-breaking ideas that offer customers more value beyond banking, such as Habari, an integrated digital platform that connects customers to anything they need, from e-commerce to music, in one place. We are also revolutionizing access to consumer loans with our first-of-its-kind digital lending product, Quick Credit, which gives individuals and small businesses instant, real-time access to loans anytime, anywhere.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- our loan section -->
+<section id="our-loan">
+    <div class="container-fluid py-5">
+        <div class="row pt-5">
+            <div class="col-md-3">
+                <div class="contect mx-3">
+                    <p class="lead small" style="text-decoration: underline; text-decoration-color:#487200;">TAKE LOOK AT OUR</p>
+                    <h2>OFFSHORE BANKING</h2>
+                    <p style="font-weight: 300; font-size: 17px;">Fast, simple, flexible. Get the perfect online banking security. We are always ready to serve you.</p>
+                    <a href="" class="btn btn-brand fw-bold">Get Started</a>
+                </div>
+                
+            </div>
+            <div class="col-md-3">
+                <div class="card border-light">
+                    <img src="{% static 'frontend/img/check-hand2.jpg' %}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                      <h5 class="card-title">We take care of you</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-light">
+                    <img src="{% static 'frontend/img/customer-service.jpg' %}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                      <h5 class="card-title">24 Hours customer service</h5>
+                    </div>
+                  </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-light">
+                    <img src="{% static 'frontend/img/check-hand3.jpg' %}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                      <h5 class="card-title">Choose the right credit card</h5>
+                    </div>
+                  </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- how do credit balance work -->
+<section id="how-do">
+    <div class="container py-5">
+        <div class="row pt-5">
+            <div class="col-md-5">
+                <p class="lead">HILLMARK CREDIT KNOWLEDGE CENTER</p>
+                <h1>How Do Credit Card Balance Transfers Work?</h1>
+                <p>Get the facts and do the math to find out whether a balance transfer is right for you.</p>
+                <a href="" class="btn btn-brand fw-bold">Learn More</a>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-6 mt-4 mt-sm-0">
+                <img src="{% static 'frontend/img/how-do.jpg' %}" alt="" class="img-fluid rounded" style="width: 500px;">
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- services line -->
+{% include "./service_line.html" %}
+
+
+{% endblock %}

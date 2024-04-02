@@ -1,0 +1,99 @@
+{% extends './base.html' %}
+
+{% load static%}
+
+{% block content %}
+
+<!-- hero section -->
+<section id="hero">
+    <div class="container-fluid">
+        <div class="row justify-content-center align-item-center">
+            <div class="col-md-7 text-center hero-content">
+                <!-- <h1>HILLMARK <span>FINANCIAL</span> INSTITUTE</h1> -->
+                <h1>HILLMARK <span>OFFSHORE</span> SERVICES</h1>
+                <p>We are on a mission to make financial services cheaper, easily accessible, and more rewarding for every person and business in the world.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- our loan section -->
+<section id="our-loan">
+    <div class="container-fluid py-5">
+        <div class="row pt-5">
+            <div class="col-md-3">
+                <div class="contect mx-3">
+                    <p class="lead small" style="text-decoration: underline; text-decoration-color:#487200;">TAKE LOOK AT OUR</p>
+                    <h2>OFFSHORE SERVICES</h2>
+                    <p style="font-weight: 300; font-size: 17px;">Fast, simple, flexible. Get the perfect online banking security. We are always ready to serve you.</p>
+                    <a href="" class="btn btn-brand fw-bold">Get Started</a>
+                </div>
+                
+            </div>
+            <div class="col-md-3">
+                <div class="card border-light">
+                    <img src="{% static 'frontend/img/check-hand2.jpg' %}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                      <h5 class="card-title">We take care of you</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-light">
+                    <img src="{% static 'frontend/img/customer-service.jpg' %}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                      <h5 class="card-title">24 Hours customer service</h5>
+                    </div>
+                  </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-light">
+                    <img src="{% static 'frontend/img/check-hand3.jpg' %}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                      <h5 class="card-title">Choose the right credit card</h5>
+                    </div>
+                  </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- how do credit balance work -->
+<section id="how-do">
+    <div class="container py-5">
+        <div class="row pt-5">
+            <div class="col-md-5">
+                <p class="lead">HILLMARK CREDIT KNOWLEDGE CENTER</p>
+                <h1>How Do Credit Card Balance Transfers Work?</h1>
+                <p>Get the facts and do the math to find out whether a balance transfer is right for you.</p>
+                <a href="" class="btn btn-brand fw-bold">Learn More</a>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-6 mt-4 mt-sm-0">
+                <img src="{% static 'frontend/img/how-do.jpg' %}" alt="" class="img-fluid rounded" style="width: 500px;">
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- fixed oh -->
+<section id="fixed-oh">
+    <div class="container py-5">
+        <div class="row justify-content-center align-item-center py-5">
+            <div class="col-md-7 text-center">
+                <h3>Sustainable Development</h3>
+                <p>Our aim is to reduce our negative social, economic and environmental footprints while enhancing the overall value we create as a leading brand.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- services line -->
+{% include "./service_line.html" %}
+
+
+{% endblock %}

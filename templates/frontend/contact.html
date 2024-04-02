@@ -1,0 +1,58 @@
+{% extends './base.html' %}
+
+<!-- {% load static%} -->
+
+{% block content %}
+
+
+<section id="contact">
+    <div class="container py-5">
+        <div class="row pt-3">
+            <div class="col-md-6">
+                <div class="card shadow contact_us text-white mb-4">
+                    <h2 class="my-3 text-center">Contact Us</h2>
+                    <p class="text-center lead">Have a question?</p>
+                    <div class="card-body mx-3 ">
+                        <form action="">
+                            <div class="mb-3">
+                                <label for="name" class="form-label fw-bold">Full Name</label>
+                                <input type="text" class="form-control" id="name" placeholder="Full Name">
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label fw-bold">Email</label>
+                                <input type="email" class="form-control" id="email" placeholder="example@gmail.com">
+                            </div>
+                            <div class="mb-3">
+                                <label for="subjectl" class="form-label fw-bold">Subject</label>
+                                <input type="email" class="form-control" id="subject" placeholder="subject">
+                            </div>
+                            <div class="mb-3">
+                                <label for="message" class="form-label">Message</label>
+                                <textarea class="form-control" id="message" rows="3"></textarea>
+                            </div>
+                            <input type="submit" value="Send" class="btn btn-brand w-100 fw-bold">
+                              
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card shadow mb-4 contact_us text-white">
+                    <div class="card-body">
+                        <p><i class="bi bi-envelope-check me-2"></i>contact@hallmarkonline.com</p>
+                        <p><i class="bi bi-geo-alt me-2"></i>No 26 chinenye nenye nwa street olugoni lagos</p>
+                        <p><i class="bi bi-telephone-forward me-2"></i>000-0000-0000</p>
+                    </div>
+                </div>
+                <div class="card shadow">
+                    <div class="card-body">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387194.06249373424!2d-74.30934110707844!3d40.69701924822564!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sng!4v1688876480828!5m2!1sen!2sng"  style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock%}

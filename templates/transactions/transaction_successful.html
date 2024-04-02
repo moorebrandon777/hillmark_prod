@@ -1,0 +1,85 @@
+{% extends '../account/base.html' %}
+
+{% load static%}
+{% load humanize %}
+
+{% block content %}
+<style>
+    .main-t{
+        background: #c187eea8 !important;
+        /* color: white !important; */
+    }
+    .main-trt{
+        background: #50008d !important;
+        color: white !important;
+        border-color: #fff !important;
+        
+    }
+</style>
+
+
+    <div class="container py-5">
+      <div class="row justify-content-center align-item-center pt-5">
+        <div class="col-md-5">
+          <div class="card shadow rounded bg-white">
+            
+            <div class="card-body">
+              <h3 class="mb-3 text-center text-success">Transaction Successful</h3>
+              <hr>
+              <p class="card-text">Your Transaction is Successful, Thank you for banking with us</p>
+              <hr>
+              <div class="table-repsonsive">
+                <table class="table table-bordered" style="font-size: 14px;">
+                    <thead>
+                      <tr>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>    
+                        <td class="main-t">Date/Time</td>
+                        <td>{{transaction.transaction_date}} {{transaction.transaction_time}}</td>               
+                      </tr>
+                      <tr>    
+                        <td class="main-t">Beneficiary Name</td>
+                        <td>{{transaction.beneficiary_name}}</td>               
+                      </tr>
+                      <tr>    
+                        <td class="main-t">Account Number</td>
+                        <td>xxxxxxx{{transaction.beneficiary_account|slice:'6:10'}}</td>               
+                      </tr>
+                      <tr>    
+                        <td class="main-t">Amount</td>
+                        <td>{{transaction.account.currency}}{{transaction.amount|intcomma}}</td>               
+                      </tr>
+                      <tr>    
+                        <td class="main-t">Type</td>
+                        <td>{{transaction.transaction_type}}</td>               
+                      </tr>
+                      <tr>    
+                        <td class="main-t">Status</td>
+                        <td class="text-success"><strong>{{transaction.status}}</strong></td>               
+                      </tr>
+                      <tr>    
+                        <td class="main-trt">Available Balance</td>
+                        <td class="main-trt">{{transaction.account.currency}}{{transaction.account.balance|intcomma}}</td>               
+                      </tr>
+                      
+                    </tbody>
+                  </table>
+              </div>
+              
+              <div class="">
+                <!-- <a href="" class="btn btn-secondary btn-sm fw-bold w-100 me-4 mb-3">Try Again</a> -->
+                <a href="{% url 'account:customer_dashboard' %}" class="btn btn-secondary btn-sm fw-bold w-100 text-white"><i class="bx bx-arrow-back me-3 icon"></i>Back to Dashboard</a>
+              </div>
+              
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+{% endblock%}

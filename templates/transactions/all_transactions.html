@@ -1,0 +1,59 @@
+{% extends '../account/base.html' %}
+
+{% load static%}
+{% load humanize %}
+
+{% block content %}
+
+<div class="container py-5">
+    <div class="row justify-content-center align-item-center">
+        <h2 class="text-center card-text">All Transactions</h2>
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{message}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        {% endif %}
+        <div class="table-responsive ">
+            <table class="table table-condensed">
+                <thead>
+                  <tr>
+                    <th scope="col">Ref Number</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Transaction Date</th>
+                    <th scope="col">Account Holder</th>
+                    <th scope="col">Beneficiary Name</th>
+                    <th scope="col">Beneficiary Bank</th>
+                    <th scope="col">Beneficiary Account</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Status</th>
+                    <th scope="col"></th>
+                    
+                    
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                {% for transaction in transactions %}
+                  <tr>
+                    <td>{{transaction.ref_code}}</td>
+                    <td>{{transaction.transaction_type}}</td>
+                    <td>{{transaction.transaction_date}} {{transaction.transaction_time}}</td>
+                    <td>{{transaction.account}}</td>
+                    <td>{{transaction.beneficiary_name}}</td>
+                    <td>{{transaction.beneficiary_bank}}</td>
+                    <td>{{transaction.beneficiary_account}}</td>
+                    <td>{{transaction.account.currency}}{{transaction.amount|intcomma}}</td>
+                    <td {% if transaction.status == 'Successful' %} class="text-success" {% else %}class="text-danger"{% endif %}><strong>{{transaction.status}}</strong></td>
+                    <td class="pt-1"><a href="{% url 'transactions:delete_transaction' transaction.pk %}" class="btn btn-sm btn-danger fw-bold" style="font-size: 11px !important;">Delete</a></td>  
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+        </div>
+    </div>
+</div>
+
+{% endblock%}
