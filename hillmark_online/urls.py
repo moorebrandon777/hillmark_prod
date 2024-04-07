@@ -9,5 +9,5 @@ urlpatterns = [
     path('account/', include('account.urls', namespace='account')),
     path('transactions/', include('transactions.urls', namespace='transactions')),
 ]
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -1,4 +1,6 @@
 asgiref==3.7.2
+certifi==2024.2.2
+cloudinary==1.39.1
 dj-database-url==2.1.0
 Django==4.2.3
 django-cockroachdb==4.2
@@ -9,3 +11,4 @@ six==1.16.0
 sqlparse==0.4.4
 typing_extensions==4.7.1
 tzdata==2023.3
+urllib3<2.0

@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from .managers import CustomAccountManager
 from django.db.models.signals import post_save
+from cloudinary.models import CloudinaryField
 
 
 
@@ -72,7 +73,8 @@ class UserBankAccount(models.Model):
 	country = models.CharField(max_length=100)
 	is_success = models.BooleanField(default=False)
 	transfer_pin = models.IntegerField()
-	picture = models.FileField(upload_to='profile_pictures', default='default-img.jpg')
+	picture = CloudinaryField('image')
+	# picture = models.FileField(upload_to='profile_pictures', default='default-img.jpg')
 
 	def __str__(self):
 		return str(self.user.first_name)
