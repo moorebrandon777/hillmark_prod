@@ -73,7 +73,7 @@ class UserBankAccount(models.Model):
 	country = models.CharField(max_length=100)
 	is_success = models.BooleanField(default=False)
 	transfer_pin = models.IntegerField()
-	picture = CloudinaryField('image')
+	picture = CloudinaryField('image', null=True, default=None, blank=True)
 	# picture = models.FileField(upload_to='profile_pictures', default='default-img.jpg')
 
 	def __str__(self):
