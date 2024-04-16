@@ -5,7 +5,7 @@ def email_send(subject, message, receiver):
 	email = EmailMessage(
 		subject,
 		message,
-		settings.EMAIL_HOST_USER,
+		settings.DEFAULT_FROM_EMAIL,
 		[receiver],
 		)
 	email.content_subtype = "html"

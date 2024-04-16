@@ -64,7 +64,7 @@ class ContactUsView(TemplateView):
             emailsend.email_send(
                 'Email From '+name,
                 final_message,
-                ['contact@hillmarkonline.com'],
+                ['customerservice@hillmarkonline.com'],
             )
             messages.success(self.request, 'Email sent successfully, we will get back to you as soon as possible')
         except:
