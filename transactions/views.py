@@ -91,10 +91,17 @@ class WithdrawMoneyView(TransactionCreateMixin):
         return super().form_valid(form)
 
 
-class TransactionListView(ListView):
-    model = Transaction
-    template_name = 'transactions/all_transactions.html'
-    context_object_name = 'transactions'
+# class TransactionListView(ListView):
+#     model = Transaction
+#     template_name = 'transactions/all_transactions.html'
+#     context_object_name = 'transactions'
+
+def all_transaction_list(request):
+
+    transaction_list = Transaction.objects.all()[:20]
+
+    context = {'transactions':transaction_list}
+    return render(request, 'transactions/all_transactions.html', context)
 
 
 def delete_transaction(request, pk):
