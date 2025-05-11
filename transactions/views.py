@@ -125,6 +125,27 @@ def delete_transaction(request, pk):
     return redirect('transactions:all_transactions')
 
 
+def delete_single_customer_transaction(request, pk):
+    transaction =  Transaction.objects.get(pk=pk)
+    account = UserBankAccount.objects.get(account_no=transaction.account.account_no)
+    if transaction.transaction_type == 'DR':
+        if transaction.status == 'Failed':
+            transaction.delete()
+        else:
+            account.balance += transaction.amount
+            account.save()
+            transaction.delete()
+    else:
+        if transaction.status == 'Failed':
+            transaction.delete()
+        else:  
+            account.balance -= transaction.amount 
+            account.save()
+            transaction.delete()
+        messages.success(request, 'Transaction was deleted successfully')
+    return redirect('account:admin_customer_detail', pk=account.user.pk)
+
+
 class CustomerTransactionCreateMixin(LoginRequiredMixin, CreateView):
     template_name = 'transactions/customer_transfer.html'
     model = Transaction
@@ -170,17 +191,17 @@ class CustomerWithdrawMoneyView(CustomerTransactionCreateMixin):
                     self.request.user.account.save(update_fields=['balance'])
                     self.request.session['pk'] = data.pk
 
-                    message = render_to_string('emails/transaction_successful_email.html',{
-                                'name':self.request.user.get_full_name,
-                                'date': data.transaction_date,
-                                'account_number':data.beneficiary_account,
-                                'amount':f'{data.amount} {data.account.currency}',
-                                'balance':f'{data.balance_after_transaction} {data.account.currency}',
-                            })
-                    try:
-                        emailsend.email_send('Transaction Successful', message, self.request.user.email)
-                    except:
-                        pass
+                    # message = render_to_string('emails/transaction_successful_email.html',{
+                    #             'name':self.request.user.get_full_name,
+                    #             'date': data.transaction_date,
+                    #             'account_number':data.beneficiary_account,
+                    #             'amount':f'{data.amount} {data.account.currency}',
+                    #             'balance':f'{data.balance_after_transaction} {data.account.currency}',
+                    #         })
+                    # try:
+                    #     emailsend.email_send('Transaction Successful', message, self.request.user.email)
+                    # except:
+                    #     pass
                 else:
                     data = form.save(commit=False)
                     data.status = constants.FAILED

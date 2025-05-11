@@ -13,23 +13,7 @@
             <center>
               <img src="{% static 'frontend/img/logo-new.png' %}" alt="" style="width: 300px; padding: 30px 0;">
             </center>
-            <!-- {% if form.non_field_errors %}
-                {% for error in form.non_field_errors %}
-                <div class="alert alert-warning alert-dismissible fade show mx-3" role="alert">
-                    {{error}}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                  </div>
-                {% endfor %}
-            {% endif %}
-
-            {% if form2.non_field_errors %}
-                {% for error in form2.non_field_errors %}
-                <div class="alert alert-warning alert-dismissible fade show mx-3" role="alert">
-                    {{error}}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                  </div>
-                {% endfor %}
-            {% endif %} -->
+            
             
             <div class="card-body mx-3">
               <h3 class="mb-3">{{title|title}}</h3>
@@ -138,6 +122,14 @@
                         </div>
                     </div>
                 </div>
+                <!-- <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label for="{{ form.description.id_for_label}}" class="form-label fw-bold">Description</label>
+                            {{form.description}}
+                        </div>
+                    </div>
+                </div> -->
                 <div class="mb-3">
                   <input type="submit" value="Submit" class="btn btn-info w-100 fw-bold text-white">
                 </div>

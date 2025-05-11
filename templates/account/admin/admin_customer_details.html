@@ -93,11 +93,13 @@
                     <th scope="col">Type</th>
                     <th scope="col">Transaction Date</th>
                     <th scope="col">Account Holder</th>
-                    <th scope="col">Beneficiary Name</th>
-                    <th scope="col">Beneficiary Bank</th>
-                    <th scope="col">Beneficiary Account</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Bank</th>
+                    <th scope="col">Account</th>
+                    <!-- <th scope="col">Description</th> -->
                     <th scope="col">Amount</th>
                     <th scope="col">Status</th>
+                    <th scope="col"></th>
                     
                     
                     
@@ -113,8 +115,10 @@
                     <td>{{transaction.beneficiary_name}}</td>
                     <td>{{transaction.beneficiary_bank}}</td>
                     <td>{{transaction.beneficiary_account}}</td>
+                    <!-- <td>{{transaction.description}}</td> -->
                     <td>{{transaction.currency}} {{transaction.amount}}</td>
                     <td {% if transaction.status == 'Successful' %} class="text-success" {% else %}class="text-danger"{% endif %}><strong>{{transaction.status}}</strong></td>
+                    <td class="pt-1"><a href="{% url 'transactions:delete_customer_transaction' transaction.pk %}" class="btn btn-sm btn-danger fw-bold" style="font-size: 11px !important;">Delete</a></td>  
                   </tr>
                 {% endfor %}
                 </tbody>
