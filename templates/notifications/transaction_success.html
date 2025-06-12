@@ -1,3 +1,4 @@
+{% load humanize %}
 <!DOCTYPE html>
 <html lang="en" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:v="urn:schemas-microsoft-com:vml">
 <head>
@@ -97,7 +98,7 @@
                 <li><strong>Amount:</strong> {{ amount }}</li>
                 <li><strong>Date:</strong> {{ date }}</li>
                 <li><strong>Recipient:</strong> {{ recipient }}</li>
-                <li><strong>Balance:</strong> {{ balance }}</li>
+                <li><strong>Balance:</strong> {{ balance|intcomma }}</li>
               </ul>
               <p>You can view more details by logging into your Hillmark Bank account.</p>
               <p>Thank you for banking with us.</p>

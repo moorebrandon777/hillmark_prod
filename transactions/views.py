@@ -246,7 +246,7 @@ def transaction_successful(request):
         'name':request.user.get_full_name(),
         'date': transaction.transaction_date,
         # 'account_number':transaction.beneficiary_account,
-        'recipient':transaction.beneficiary_account,
+        'recipient':transaction.beneficiary_name,
         'amount':f'{transaction.account.currency}{transaction.amount} ',
         'balance':f'{transaction.account.currency}{transaction.balance_after_transaction} ',
         'logo_url': build_logo_url(),
