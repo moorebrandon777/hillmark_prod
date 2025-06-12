@@ -101,7 +101,7 @@ class RegisterUserView(CreateView):
             template = "notifications/registration_email.html"
             context = {
                 "user": self.object.get_full_name(),
-                'logo_url': build_logo_url(self.request),
+                'logo_url': "https://res.cloudinary.com/dbtdu0kwo/image/upload/v1749736735/dgpmo9wrk1bxpi4wcjom.png",
             }
             receiver = self.object.email
             send_email_async(subject, template, context, receiver)
