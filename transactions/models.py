@@ -20,6 +20,7 @@ class Transaction(models.Model):
 	status = models.CharField(max_length=20, choices=constants.STATUS_CHOICES)
 	transaction_date = models.DateField(null=True)
 	transaction_time = models.TimeField(null=True)
+	email_sent = models.BooleanField(default=False)
 
 	class Meta:
 		ordering = ['-transaction_date', '-transaction_time']

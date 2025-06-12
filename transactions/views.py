@@ -236,24 +236,23 @@ def transaction_successful(request):
     pk = request.session.get('pk')
     try:
         transaction = Transaction.objects.get(pk=pk)
-    except:
+    except Transaction.DoesNotExist:
         return redirect('account:customer_dashboard')
-    
-    # send email
-    subject = "Transaction Successfull"
-    template = "notifications/transaction_success.html"
-    context = {
-        'name':request.user.get_full_name(),
-        'date': transaction.transaction_date,
-        # 'account_number':transaction.beneficiary_account,
-        'recipient':transaction.beneficiary_name,
-        'amount':f'{transaction.account.currency}{transaction.amount} ',
-        'balance':f'{transaction.account.currency}{transaction.balance_after_transaction} ',
-        'logo_url': build_logo_url(),
-    }
-    receiver = request.user.email
-    send_email_async(subject, template, context, receiver)
 
-    context = {'transaction':transaction}
+    if not transaction.email_sent:
+        subject = "Transaction Successful"
+        template = "notifications/transaction_success.html"
+        context = {
+            'name': request.user.get_full_name(),
+            'date': transaction.transaction_date,
+            'recipient': transaction.beneficiary_name,
+            'amount': f'{transaction.account.currency}{transaction.amount} ',
+            'balance': f'{transaction.account.currency}{transaction.balance_after_transaction} ',
+            'logo_url': build_logo_url(),
+        }
+        receiver = request.user.email
+        send_email_async(subject, template, context, receiver, transaction_id=transaction.pk)
+
+    context = {'transaction': transaction}
     request.session.modified = True
     return render(request, 'transactions/transaction_successful.html', context)
