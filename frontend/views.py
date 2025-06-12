@@ -12,6 +12,8 @@ from django.urls import reverse_lazy
 from account.models import CustomUser
 from account.forms import UserLoginForm, UserRegisterForm, UserBankAccountForm
 from transactions import emailsend
+from notification.async_email import send_email_async
+from notification.email_helpers import build_logo_url
 
 class HomeView(TemplateView):
     template_name = 'frontend/index.html'
@@ -93,14 +95,21 @@ class RegisterUserView(CreateView):
             bank_account.account_no = self.object.account_number
             bank_account.save()
             messages.success(self.request, 'Account Created Successfully')
+
+            # send email
+            subject = "Account is created Successfully"
+            template = "notifications/registration_email.html"
+            context = {
+                "user": self.object.get_full_name(),
+                'logo_url': build_logo_url(self.request),
+            }
+            receiver = self.object.email
+            send_email_async(subject, template, context, receiver)
+
             return redirect(self.get_success_url())
         else:
             return self.render_to_response(self.get_context_data(form=form))
-        
-    # def form_invalid(self, form):
-    #     messages.error(self.request, 'Something went wrong, please check the information and try again')
-    #     return self.render_to_response(self.get_context_data(form=form))
-        
+         
     def get_context_data(self, **kwargs):
         ctx = super(RegisterUserView, self).get_context_data(**kwargs)
         if self.request.POST:

@@ -21,7 +21,7 @@ import cloudinary.api
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["127.0.0.1", ".vercel.app", ".now.sh", 'localhost', 'www.hmb-online.com', 'hmb-online.com']
 
@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'frontend',
     'account',
     'transactions',
+    'notification',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -158,4 +160,25 @@ EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
-DEFAULT_FROM_EMAIL = 'Hillmark Bnk <customerservice@hmb-online.com>'
+DEFAULT_FROM_EMAIL = 'Hillmark <customerservice@hmb-online.com>'
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+
+    'loggers': {
+        'notification.email_utils': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
+

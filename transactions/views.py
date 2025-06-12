@@ -236,6 +236,22 @@ def transaction_successful(request):
         transaction = Transaction.objects.get(pk=pk)
     except:
         return redirect('account:customer_dashboard')
+    
+    # get template datas
+    message = render_to_string('emails/transaction_successful_email.html',{
+                                'name':request.user.get_full_name,
+                                'date': transaction.transaction_date,
+                                'account_number':transaction.beneficiary_account,
+                                'amount':f'{transaction.amount} {transaction.account.currency}',
+                                'balance':f'{transaction.balance_after_transaction} {transaction.account.currency}',
+                            })
+    
+
+    # send email
+    try:
+        emailsend.email_send('Transaction Successful', message, request.user.email)
+    except:
+        pass
 
     context = {'transaction':transaction}
     request.session.modified = True
