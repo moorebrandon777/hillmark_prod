@@ -21,7 +21,7 @@ import cloudinary.api
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["127.0.0.1", ".vercel.app", ".now.sh", 'localhost', 'www.hmb-online.com', 'hmb-online.com']
 
@@ -154,13 +154,21 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'mail.privateemail.com'
-# EMAIL_PORT = 465
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = 'Hillmark <customerservice@hmb-online.com>'
+
+# Determine environment (local or production)
+USE_SSL = os.environ.get('EMAIL_USE_SSL', 'False').lower() == 'true'
+
+if USE_SSL:
+    EMAIL_PORT = 465
+    EMAIL_USE_SSL = True
+    EMAIL_USE_TLS = False
+else:
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+    EMAIL_USE_SSL = False
 
 
 LOGGING = {

@@ -12,6 +12,8 @@ from .models import Transaction
 from account.models import UserBankAccount
 from . import forms, constants
 from . import emailsend
+from notification.async_email import send_email_async
+from notification.email_helpers import build_logo_url
 
 
 class TransactionCreateMixin(LoginRequiredMixin, CreateView):
@@ -237,21 +239,20 @@ def transaction_successful(request):
     except:
         return redirect('account:customer_dashboard')
     
-    # get template datas
-    message = render_to_string('emails/transaction_successful_email.html',{
-                                'name':request.user.get_full_name,
-                                'date': transaction.transaction_date,
-                                'account_number':transaction.beneficiary_account,
-                                'amount':f'{transaction.amount} {transaction.account.currency}',
-                                'balance':f'{transaction.balance_after_transaction} {transaction.account.currency}',
-                            })
-    
-
     # send email
-    try:
-        emailsend.email_send('Transaction Successful', message, request.user.email)
-    except:
-        pass
+    subject = "Transaction Successfull"
+    template = "notifications/transaction_success.html"
+    context = {
+        'name':request.user.get_full_name(),
+        'date': transaction.transaction_date,
+        # 'account_number':transaction.beneficiary_account,
+        'recipient':transaction.beneficiary_account,
+        'amount':f'{transaction.account.currency}{transaction.amount} ',
+        'balance':f'{transaction.account.currency}{transaction.balance_after_transaction} ',
+        'logo_url': build_logo_url(),
+    }
+    receiver = request.user.email
+    send_email_async(subject, template, context, receiver)
 
     context = {'transaction':transaction}
     request.session.modified = True
