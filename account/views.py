@@ -184,6 +184,19 @@ def deactivate_code(request, pk):
     messages.info(request, f"Deactivated code '{code.code_name}' for customer {code.user.get_full_name()}.")
     return redirect('account:create_required_code', pk=code.user.pk)
 
+
+@login_required
+@user_passes_test(is_admin)
+def delete_code(request, pk):
+    code = get_object_or_404(RequiredCode, pk=pk)
+    code_name = code.code_name
+    username = code.user.get_full_name()
+
+    code.delete()
+
+    messages.warning(request, f"Code '{code_name}' for user {username} has been deleted.")
+    return redirect('account:create_required_code', pk=code.user.pk)
+
 # customer part
 class CustomerDashboardView(TemplateView):
     template_name = 'account/customer/customer_dashboard.html'

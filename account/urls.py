@@ -16,6 +16,7 @@ urlpatterns = [
     path('create_required_code/<pk>/', views.create_required_code, name="create_required_code"),
     path('activate/<int:pk>/', views.activate_code, name='activate_code'),
     path('deactivate/<int:pk>/', views.deactivate_code, name='deactivate_code'),
+    path('delete/<int:pk>/', views.delete_code, name='delete_code'),
 
     # cutomer part
     path('customer_dashboard/', views.CustomerDashboardView.as_view(), name="customer_dashboard"),
