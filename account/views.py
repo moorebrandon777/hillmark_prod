@@ -1,7 +1,7 @@
 import math
 from typing import Any
 from django.db.models.query import QuerySet
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.conf import settings
 from django.contrib import messages
 from django.template.loader import render_to_string
@@ -9,12 +9,15 @@ from django.views.generic import TemplateView, ListView, DetailView, UpdateView
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse_lazy
 from django.core.mail import send_mail
+from django.contrib.auth.decorators import login_required, user_passes_test
 
-from .models import CustomUser, UserBankAccount
-from .forms import UserUpdateForm, UserBankAccountForm
+from .models import CustomUser, UserBankAccount, RequiredCode
+from .forms import UserUpdateForm, UserBankAccountForm, RequiredCodeForm
 from transactions.models import Transaction
 
-
+# Optional helper: only admins or staff can access
+def is_admin(user):
+    return user.is_staff or user.is_superuser
 
 # admin part
 class AdminDashboardView(ListView):
@@ -48,8 +51,9 @@ class CustomerDetailsAdminView(DetailView):
         context['account'] = UserBankAccount.objects.get(user=self.object)
         context['transactions'] = Transaction.objects.filter(account=self.object.account)
         return context
-    
 
+
+@login_required
 def activate_and_deactivate_customer_account(request, pk):
     customer = CustomUser.objects.get(pk=pk)
     if not customer.is_activated:
@@ -63,6 +67,7 @@ def activate_and_deactivate_customer_account(request, pk):
     return redirect('account:admin_customer_detail', pk=pk)
 
 
+@login_required
 def admin_transaction_success_or_fail(request, pk):
     customer = CustomUser.objects.get(pk=pk)
     account = UserBankAccount.objects.get(user=customer)
@@ -75,7 +80,8 @@ def admin_transaction_success_or_fail(request, pk):
         account.save()
         messages.success(request, "Transactions for this customer will fail")
     return redirect('account:admin_customer_detail', pk=pk)
-    
+
+
 class UpdateCustomerView(UpdateView):
     model = CustomUser
     form_class = UserUpdateForm
@@ -110,13 +116,13 @@ class UpdateCustomerView(UpdateView):
               self.get_context_data(form=form, form2=form2))
         
 
+@login_required
 def admin_change_customer_password(request, pk):
     if request.method == 'POST':
         customer = CustomUser.objects.get(pk=pk)
         password_one = request.POST.get('password1')
         password_two = request.POST.get('password1')
-        print(password_one)
-        print(password_two)
+        
         if password_one != password_two:
             messages.error(request, 'The two password does not match, check it and try again')
         else:
@@ -126,12 +132,57 @@ def admin_change_customer_password(request, pk):
         return redirect('account:admin_customer_detail', pk=pk)
 
 
+@login_required
 def admin_delete_customer(request, pk):
     customer = CustomUser.objects.get(pk=pk)
     customer.delete()
     messages.success(request, 'customer was deleted successfully')
     return redirect('account:admin_dashboard')
 
+
+@login_required
+def create_required_code(request, pk):
+    customer = CustomUser.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = RequiredCodeForm(request.POST)
+        if form.is_valid():
+            required_code = form.save(commit=False)
+            required_code.user = customer
+            required_code.save()
+            messages.success(request, 'Code is created successfully')
+            return redirect('account:create_required_code', pk=pk)
+    else:
+        form = RequiredCodeForm()
+        required_codes = RequiredCode.objects.filter(user=customer)
+    return render(request, 'account/admin/add_required_code.html', {'form': form, "required_codes":required_codes, "customer":customer})
+
+
+@login_required
+@user_passes_test(is_admin)
+def activate_code(request, pk):
+    code = get_object_or_404(RequiredCode, pk=pk)
+
+    # Deactivate all other codes for the same user
+    RequiredCode.objects.filter(user=code.user).exclude(pk=pk).update(is_active=False)
+
+    # Activate this code
+    code.is_active = True
+    code.save()
+
+    messages.success(request, f"Activated code '{code.code_name}' for customer {code.user.get_full_name()}.")
+    return redirect('account:create_required_code', pk=code.user.pk)
+
+
+@login_required
+@user_passes_test(is_admin)
+def deactivate_code(request, pk):
+    code = get_object_or_404(RequiredCode, pk=pk)
+
+    code.is_active = False
+    code.save()
+
+    messages.info(request, f"Deactivated code '{code.code_name}' for customer {code.user.get_full_name()}.")
+    return redirect('account:create_required_code', pk=code.user.pk)
 
 # customer part
 class CustomerDashboardView(TemplateView):

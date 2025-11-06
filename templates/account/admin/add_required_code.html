@@ -1,0 +1,107 @@
+{% extends '../base.html' %}
+
+{% load static%}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow rounded">
+                {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                <div class="alert alert-warning alert-dismissible fade show mx-3" role="alert">
+                    {{error}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+                {% endif %}
+
+                <div class="card-body mx-3">
+                    <h5 class="mb-3 text-center">Create Code</h5>
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{message}}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    <hr>
+
+                    <form action="." method="POST">
+                        {% csrf_token %}
+                        {% if form.errors %}
+                        <p class="text-white fw-bold">Please correct the following errors:</p>
+                        {% for field in form %}
+                        {% if field.errors %}
+                        <div class="alert alert-primary" role="alert">
+                            {{ field.label }}: {{ field.errors|striptags }}
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        {% endif %}
+                        <div class="mb-3">
+                            {{ form.code_name.label_tag }}
+                            {{ form.code_name }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.code_number.label_tag }}
+                            {{ form.code_number }}
+                        </div>
+                        <div class="form-check mb-3">
+                            {{ form.is_active }}
+                            {{ form.is_active.label_tag }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.user.label_tag }}
+                            {{ form.user }}
+                        </div>
+
+                        <div class="mb-3">
+                            <input type="submit" value="Create" class="btn btn-info w-100 fw-bold text-white">
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <h5 class="text-center card-text">{{customer.get_full_name}}'s Required Codes</h5>
+            <div class="table-responsive ">
+                <table class="table table-condensed">
+                    <thead>
+                    <tr>
+                        <th scope="col">Code Name</th>
+                        <th scope="col">Code</th>
+                        <th scope="col">Code Status</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for code in required_codes %}
+                        <tr>
+                            <td>{{code.code_name}}</td>
+                            <td>{{code.code_number}}</td>
+                            {% if code.is_active %}
+                                <td>Active</td>
+                            {% else %}
+                                <td>Inactive</td>
+                            {% endif %}
+                            
+                            {% if code.is_active %}
+                            <td class="pt-1"><a href="{% url 'account:deactivate_code' code.pk %}" class="btn btn-sm btn-secondary fw-bold text-white" style="font-size: 11px !important;">Deactivate</a></td> 
+                            {% else %}
+                            <td class="pt-1"><a href="{% url 'account:activate_code' code.pk %}" class="btn btn-sm btn-info fw-bold text-white" style="font-size: 11px !important;">Activate</a></td> 
+                            {% endif %}
+                            <td class="pt-1"><a href="" class="btn btn-sm btn-danger fw-bold" style="font-size: 11px !important;">Delete</a></td> 
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

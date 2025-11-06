@@ -13,6 +13,9 @@ urlpatterns = [
     path('update_customer/<pk>/', views.UpdateCustomerView.as_view(), name="update_customer"),
     path('admin_change_customer_password/<pk>/', views.admin_change_customer_password, name="admin_change_customer_password"),
     path('admin_delete_customer/<pk>/', views.admin_delete_customer, name="admin_delete_customer"),
+    path('create_required_code/<pk>/', views.create_required_code, name="create_required_code"),
+    path('activate/<int:pk>/', views.activate_code, name='activate_code'),
+    path('deactivate/<int:pk>/', views.deactivate_code, name='deactivate_code'),
 
     # cutomer part
     path('customer_dashboard/', views.CustomerDashboardView.as_view(), name="customer_dashboard"),

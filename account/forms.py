@@ -2,7 +2,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import get_user_model
 from django import forms
 
-from .models import UserBankAccount
+from .models import UserBankAccount, RequiredCode
 
 
 
@@ -51,3 +51,19 @@ class UserUpdateForm(forms.ModelForm):
 
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control mb-3'})
+
+
+class RequiredCodeForm(forms.ModelForm):
+    class Meta:
+        model = RequiredCode
+        fields = ['code_name', 'code_number']
+        # fields = ['code_name', 'code_number', 'is_active', 'user']
+
+    def __init__(self, *args, **kwargs):
+        super(RequiredCodeForm, self).__init__(*args, **kwargs)
+        # Add Bootstrap 'form-control' class to each field
+        for field_name, field in self.fields.items():
+            if not isinstance(field.widget, forms.CheckboxInput):
+                field.widget.attrs['class'] = 'form-control'
+            else:
+                field.widget.attrs['class'] = 'form-check-input'

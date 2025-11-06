@@ -74,8 +74,17 @@ class UserBankAccount(models.Model):
 	is_success = models.BooleanField(default=False)
 	transfer_pin = models.IntegerField()
 	picture = CloudinaryField('image', null=True, default=None, blank=True)
-	# picture = models.FileField(upload_to='profile_pictures', default='default-img.jpg')
 
 	def __str__(self):
 		return str(self.user.first_name)
 
+
+class RequiredCode(models.Model):
+    code_name = models.CharField(max_length=100)
+    code_number = models.IntegerField()
+    is_active = models.BooleanField(default=False)
+    date_created = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='required_codes')
+
+    def __str__(self):
+        return f"{self.code_name} ({self.code_number})"

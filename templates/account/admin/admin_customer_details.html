@@ -46,6 +46,7 @@
                     <a href="{% url 'account:activate_customer' customer.pk %}" class="btn btn-danger fw-bold w-100 btn-sm mb-3">Deactivate Account</a> 
                     {% endif %}
                     <a href="{% url 'account:update_customer' customer.pk %}" class="btn btn-secondary fw-bold w-100 btn-sm">Update Account Info</a>
+                    <a href="{% url 'account:create_required_code' customer.pk %}" class="btn btn-info fw-bold w-100 btn-sm mt-3 text-white">Required Codes</a>
                 </div>
             </div>
         </div>
