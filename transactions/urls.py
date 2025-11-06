@@ -16,4 +16,6 @@ urlpatterns = [
     path("account/transfer/", views.CustomerWithdrawMoneyView.as_view(), name="customer_transfer"),
     path("transaction_successful/", views.transaction_successful, name="transaction_successful"),
     path("transaction_failed/", views.transaction_failed, name="transaction_failed"),
+
+    path("verify-code/", views.verify_code, name="verify_code"),
 ]

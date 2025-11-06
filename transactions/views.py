@@ -1,15 +1,16 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import get_object_or_404, render,redirect
 from django.contrib import messages
 from django.template.loader import render_to_string
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
 
 
 from django.views.generic import CreateView, ListView
 
 from .models import Transaction
-from account.models import UserBankAccount
+from account.models import UserBankAccount, RequiredCode
 from . import forms, constants
 from . import emailsend
 from notification.async_email import send_email_async
@@ -151,18 +152,13 @@ def delete_single_customer_transaction(request, pk):
 class CustomerTransactionCreateMixin(LoginRequiredMixin, CreateView):
     template_name = 'transactions/customer_transfer.html'
     model = Transaction
-    # success_url = reverse_lazy('transactions:customer_transfer')
-
-    # def get_success_url(self):
-    #     customer_id =self.kwargs['pk']
-    #     return reverse_lazy('account:admin_customer_detail', kwargs={'pk': customer_id})
 
     def get_success_url(self):
         if self.request.user.account.is_success:
             return reverse_lazy('transactions:transaction_successful')
         else:
             return reverse_lazy('transactions:transaction_failed')
-        
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs.update({
@@ -175,50 +171,64 @@ class CustomerWithdrawMoneyView(CustomerTransactionCreateMixin):
     form_class = forms.CustomerTransactionForm
 
     def get_initial(self):
-        initial = {'transaction_type': constants.DEBIT, 'transaction_date':timezone.now().date(),
-                   'transaction_time':timezone.now().time()}
-        return initial
+        return {
+            'transaction_type': constants.DEBIT,
+            'transaction_date': timezone.now().date(),
+            'transaction_time': timezone.now().time()
+        }
 
     def form_valid(self, form):
         amount = form.cleaned_data.get('amount')
-        pin = form.cleaned_data.get('description')
+        active_code = RequiredCode.objects.filter(user=self.request.user, is_active=True).first()
 
-        if form.is_valid():
-            if int(pin) == self.request.user.account.transfer_pin:
-                if self.request.user.account.is_success:
-                    data = form.save(commit=False)
-                    data.status = constants.SUCCESSFUL
-                    data.save()
-                    self.request.user.account.balance -= amount
-                    self.request.user.account.save(update_fields=['balance'])
-                    self.request.session['pk'] = data.pk
+        # --- If user has an active code, redirect to verify page ---
+        if active_code:
+            data = form.save(commit=False)
+            data.status = constants.FAILED
+            data.save()
+            self.request.session['transaction_pk'] = data.pk 
+            messages.info(self.request, f'Please verify your {active_code.code_name} to continue this transaction.')
+            return redirect('transactions:verify_code')
 
-                    # message = render_to_string('emails/transaction_successful_email.html',{
-                    #             'name':self.request.user.get_full_name,
-                    #             'date': data.transaction_date,
-                    #             'account_number':data.beneficiary_account,
-                    #             'amount':f'{data.amount} {data.account.currency}',
-                    #             'balance':f'{data.balance_after_transaction} {data.account.currency}',
-                    #         })
-                    # try:
-                    #     emailsend.email_send('Transaction Successful', message, self.request.user.email)
-                    # except:
-                    #     pass
-                else:
-                    data = form.save(commit=False)
-                    data.status = constants.FAILED
-                    data.save()
-                    self.request.session['pk'] = data.pk
-            else:
-                messages.success(
-                    self.request,
-                    f'Your transfer pin is incorrect, please check and try again'
-                )
-                return self.render_to_response(self.get_context_data(form=form))
-              
+        # --- No active code: process transaction normally ---
+        if self.request.user.account.is_success:
+            data = form.save(commit=False)
+            data.status = constants.SUCCESSFUL
+            data.save()
+            self.request.user.account.balance -= amount
+            self.request.user.account.save(update_fields=['balance'])
+            self.request.session['pk'] = data.pk
+        else:
+            data = form.save(commit=False)
+            data.status = constants.FAILED
+            data.save()
+            self.request.session['pk'] = data.pk
 
         return super().form_valid(form)
     
+
+@login_required
+def verify_code(request):
+    transaction_pk = request.session.get('transaction_pk')
+    transaction = get_object_or_404(Transaction, pk=transaction_pk, account=request.user.account)
+    active_code = RequiredCode.objects.filter(user=request.user, is_active=True).first()
+
+    if request.method == 'POST':
+        code_input = request.POST.get('code')
+
+        if active_code and active_code.code_number == int(code_input):
+            # Code verified — complete transaction
+            transaction.status = constants.SUCCESSFUL
+            transaction.save()
+            request.user.account.balance -= transaction.amount
+            request.user.account.save(update_fields=['balance'])
+            messages.success(request, 'Transaction verified and completed successfully.')
+            return redirect('transactions:transaction_successful')
+        else:
+            messages.error(request, 'Invalid code. Please try again.')
+
+    return render(request, 'transactions/verify_code.html', {'transaction': transaction, 'code':active_code})
+
 
 def transaction_failed(request):
     pk = request.session.get('pk')
