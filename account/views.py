@@ -117,6 +117,7 @@ class UpdateCustomerView(UpdateView):
         
 
 @login_required
+@user_passes_test(is_admin)
 def admin_change_customer_password(request, pk):
     if request.method == 'POST':
         customer = CustomUser.objects.get(pk=pk)
@@ -133,6 +134,7 @@ def admin_change_customer_password(request, pk):
 
 
 @login_required
+@user_passes_test(is_admin)
 def admin_delete_customer(request, pk):
     customer = CustomUser.objects.get(pk=pk)
     customer.delete()
@@ -141,6 +143,7 @@ def admin_delete_customer(request, pk):
 
 
 @login_required
+@user_passes_test(is_admin)
 def create_required_code(request, pk):
     customer = CustomUser.objects.get(pk=pk)
     if request.method == 'POST':
@@ -272,9 +275,9 @@ class CustomerAllTransactionsView(ListView):
     model = Transaction
     template_name = 'account/customer/customer_all_transactions.html'
     context_object_name = 'transactions'
+    paginate_by = 12  
 
     def get_queryset(self):
-        queryset = super().get_queryset().filter(account=self.request.user.account)
-        return queryset
+        return super().get_queryset().filter(account=self.request.user.account).order_by('-transaction_date')
 
         
