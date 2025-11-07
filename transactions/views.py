@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 
 
 from django.views.generic import CreateView, ListView
@@ -93,20 +94,24 @@ class WithdrawMoneyView(TransactionCreateMixin):
 
         return super().form_valid(form)
 
-
-# class TransactionListView(ListView):
-#     model = Transaction
-#     template_name = 'transactions/all_transactions.html'
-#     context_object_name = 'transactions'
-
+@login_required
 def all_transaction_list(request):
+    transaction_list = Transaction.objects.all().order_by('-transaction_date') 
 
-    transaction_list = Transaction.objects.all()[:20]
+    # Set up pagination
+    paginator = Paginator(transaction_list, 15)  
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
-    context = {'transactions':transaction_list}
+    context = {
+        'transactions': page_obj,   # use page_obj for iteration in template
+        'page_obj': page_obj,       # include this for pagination controls
+        'is_paginated': page_obj.has_other_pages(),
+    }
     return render(request, 'transactions/all_transactions.html', context)
 
 
+@login_required
 def delete_transaction(request, pk):
     transaction =  Transaction.objects.get(pk=pk)
     account = UserBankAccount.objects.get(account_no=transaction.account.account_no)
@@ -128,6 +133,7 @@ def delete_transaction(request, pk):
     return redirect('transactions:all_transactions')
 
 
+@login_required
 def delete_single_customer_transaction(request, pk):
     transaction =  Transaction.objects.get(pk=pk)
     account = UserBankAccount.objects.get(account_no=transaction.account.account_no)
@@ -238,7 +244,6 @@ def verify_code(request):
                 return redirect('transactions:transaction_failed')
 
         else:
-            print('code do not match')
             request.session['verify_fail_count'] += 1
             fail_count = request.session['verify_fail_count']
 
@@ -256,6 +261,7 @@ def verify_code(request):
     })
 
 
+@login_required
 def transaction_failed(request):
     pk = request.session.get('fInal_transaction_pk')
     try:
@@ -268,6 +274,7 @@ def transaction_failed(request):
     return render(request, 'transactions/transaction_failed.html', context)
 
 
+@login_required
 def transaction_successful(request):
     pk = request.session.get('fInal_transaction_pk')
     try:

@@ -24,6 +24,7 @@ class AdminDashboardView(ListView):
     model = CustomUser
     template_name = 'account/admin/admin_dashboard.html'
     context_object_name = 'customers'
+    paginate_by = 9  
 
     def dispatch(self, request, *args, **kwargs):
         if not self.request.user.is_staff:
@@ -32,8 +33,7 @@ class AdminDashboardView(ListView):
     
     def get_queryset(self):
         qs = super(AdminDashboardView, self).get_queryset()
-        filtered = qs.filter(is_staff=False)
-        return filtered
+        return qs.filter(is_staff=False).order_by('-date_created') 
     
 
 class CustomerDetailsAdminView(DetailView):
