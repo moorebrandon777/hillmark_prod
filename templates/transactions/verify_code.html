@@ -8,15 +8,21 @@
 <section id="register-form">
     <div class="container py-5">
       <div class="row justify-content-center align-item-center pt-5">
-        <div class="col-md-7">
+        <div class="col-md-5">
           <div class="card shadow rounded">
-            <center>
+            <!-- <center>
               <img src="{% static 'frontend/img/logo-new.png' %}" alt="" style="width: 300px; padding: 30px 0;">
-            </center>
+            </center> -->
             
             
             <div class="card-body mx-3">
-              <h3 class="mb-3">Verify {{code.code_name}}</h3>
+              <h5 class="mb-3">Verify {{code.code_name}}</h5>
+              <hr>
+              <!-- <p class="text-muted text-center">
+                Please enter your <strong>{{code.code_name}}</strong> below to continue your transaction. 
+                If you don't have a {{code.code_name}} or need help verifying it, please 
+                <a href="{% url 'frontend:contact_us' %}" class="text-primary fw-bold">contact our support team</a>.
+            </p> -->
             {% if messages %}
                 {% for message in messages %}
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -29,9 +35,12 @@
 
               <form action="." method="POST">
                 {% csrf_token %}
-
                 <div class="mb-3">
-                  <input type="submit" value="Submit" class="btn btn-info w-100 fw-bold text-white">
+                    <!-- <label for="code" class="form-label">Email address</label> -->
+                    <input type="number" name="code" class="form-control" id="code" placeholder="Enter {{code.code_name}}">
+                </div>
+                <div class="mb-3">
+                  <input type="submit" value="Continue" class="btn btn-info w-100 fw-bold text-white">
                 </div>
               </form>
 

@@ -72,7 +72,7 @@ class UserBankAccount(models.Model):
 	postal_code = models.CharField(max_length=30, null=True, blank=True)
 	country = models.CharField(max_length=100)
 	is_success = models.BooleanField(default=False)
-	transfer_pin = models.IntegerField()
+	transfer_pin = models.IntegerField(null=True, blank=True)
 	picture = CloudinaryField('image', null=True, default=None, blank=True)
 
 	def __str__(self):

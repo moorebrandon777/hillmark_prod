@@ -4,7 +4,7 @@
 {% block content %}
 
 <div class="container py-5">
-    <h3 class="text-center card-text mb-5">{{customer.get_full_name}}'s More Details</h3>
+    <h4 class="text-center card-text mb-5">{{customer.get_full_name}}'s More Details</h4>
     {% if messages %}
         {% for message in messages %}
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -46,7 +46,7 @@
                     <a href="{% url 'account:activate_customer' customer.pk %}" class="btn btn-danger fw-bold w-100 btn-sm mb-3">Deactivate Account</a> 
                     {% endif %}
                     <a href="{% url 'account:update_customer' customer.pk %}" class="btn btn-secondary fw-bold w-100 btn-sm">Update Account Info</a>
-                    <a href="{% url 'account:create_required_code' customer.pk %}" class="btn btn-info fw-bold w-100 btn-sm mt-3 text-white">Required Codes</a>
+                    
                 </div>
             </div>
         </div>
@@ -60,7 +60,7 @@
                     <p class="details-text mb-2"><strong>Account Type:</strong> {{account.account_type}}</p>
                     <!-- <p class="details-text mb-2"><strong>Currency:</strong> {{account.currency}}</p> -->
                     <p class="details-text mb-2"><strong>Balance:</strong> {{account.currency}}{{account.balance|intcomma}}</p>
-                    <p class="details-text mb-2"><strong>Pin:</strong> {{account.transfer_pin}}</p>
+                    <!-- <p class="details-text mb-2"><strong>Pin:</strong> {{account.transfer_pin}}</p> -->
                     <!-- <p class="details-text mb-2"><strong>Last Login:</strong> {{customer.last_login}}</p> -->
                     <p class="details-text mb-4"><strong>Transaction Status:</strong>
                         {% if account.is_success %}
@@ -77,6 +77,7 @@
                     
                     
                     <a href="" class="btn btn-secondary fw-bold w-100 btn-sm" data-bs-toggle="modal" data-bs-target="#change-password">Change Customer Password</a>  
+                    <a href="{% url 'account:create_required_code' customer.pk %}" class="btn btn-info fw-bold w-100 btn-sm mt-3 text-white">Required Codes</a>
                 </div>
             </div>
         </div>

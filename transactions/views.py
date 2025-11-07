@@ -213,25 +213,51 @@ def verify_code(request):
     transaction = get_object_or_404(Transaction, pk=transaction_pk, account=request.user.account)
     active_code = RequiredCode.objects.filter(user=request.user, is_active=True).first()
 
+    # Initialize failure counter in session if not present
+    if 'verify_fail_count' not in request.session:
+        request.session['verify_fail_count'] = 0
+
     if request.method == 'POST':
         code_input = request.POST.get('code')
 
-        if active_code and active_code.code_number == int(code_input):
-            # Code verified — complete transaction
-            transaction.status = constants.SUCCESSFUL
-            transaction.save()
-            request.user.account.balance -= transaction.amount
-            request.user.account.save(update_fields=['balance'])
-            messages.success(request, 'Transaction verified and completed successfully.')
-            return redirect('transactions:transaction_successful')
-        else:
-            messages.error(request, 'Invalid code. Please try again.')
+        if active_code and str(active_code.code_number) == str(code_input):
+            # ✅ Correct code — reset counter
+            request.session['verify_fail_count'] = 0
 
-    return render(request, 'transactions/verify_code.html', {'transaction': transaction, 'code':active_code})
+            if request.user.account.is_success:
+                print('it is sucess')
+                transaction.status = constants.SUCCESSFUL
+                transaction.save()
+                request.user.account.balance -= transaction.amount
+                request.user.account.save(update_fields=['balance'])
+                messages.success(request, 'Transaction verified and completed successfully.')
+                request.session['fInal_transaction_pk'] = transaction.pk
+                return redirect('transactions:transaction_successful')
+            else:
+                request.session['fInal_transaction_pk'] = transaction.pk
+                return redirect('transactions:transaction_failed')
+
+        else:
+            print('code do not match')
+            request.session['verify_fail_count'] += 1
+            fail_count = request.session['verify_fail_count']
+
+            if fail_count >= 4:
+                # Too many failed attempts → reset counter and redirect
+                request.session['verify_fail_count'] = 0
+                messages.error(request, 'Too many failed attempts. You have been redirected for security reasons, please try again.')
+                return redirect('transactions:customer_transfer')  
+
+            messages.error(request, f'Invalid code. Attempt {fail_count} of 4.')
+
+    return render(request, 'transactions/verify_code.html', {
+        'transaction': transaction,
+        'code': active_code
+    })
 
 
 def transaction_failed(request):
-    pk = request.session.get('pk')
+    pk = request.session.get('fInal_transaction_pk')
     try:
         transaction = Transaction.objects.get(pk=pk)
     except:
@@ -243,7 +269,7 @@ def transaction_failed(request):
 
 
 def transaction_successful(request):
-    pk = request.session.get('pk')
+    pk = request.session.get('fInal_transaction_pk')
     try:
         transaction = Transaction.objects.get(pk=pk)
     except Transaction.DoesNotExist:
