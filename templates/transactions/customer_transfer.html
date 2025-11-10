@@ -26,7 +26,7 @@
                         {% endif %}
                         <hr>
 
-                        <form action="." method="POST">
+                        <form action="{% url 'transactions:customer_transfer' %}" method="POST" id="transfer_form_main">
                             {% csrf_token %}
 
                             {% if form.errors %}
@@ -306,16 +306,17 @@
             // Show finalizing spinner
             statusText.innerHTML = '🔄 Finalizing transfer... <span class="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>';
 
-            // Disable cancel to prevent interrupt
+            // Disable only buttons
+            document.querySelectorAll("form button").forEach(el => el.disabled = true);
             cancelBtn.disabled = true;
 
-            // Disable all form inputs during finalizing
-            document.querySelectorAll("form input, form select, form textarea, form button").forEach(el => el.disabled = true);
-
+            // Submit the form after a short delay
             setTimeout(() => {
-                document.querySelector("form").submit();
+                document.querySelector("#transfer_form_main").submit();
             }, 2500);
         }
+
+
     });
 </script>
 

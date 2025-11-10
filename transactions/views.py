@@ -186,15 +186,15 @@ class CustomerWithdrawMoneyView(CustomerTransactionCreateMixin):
     def form_valid(self, form):
         amount = form.cleaned_data.get('amount')
         active_code = RequiredCode.objects.filter(user=self.request.user, is_active=True).first()
-
+        print('i am here now')
         # --- If user has an active code, redirect to verify page ---
-        if active_code:
-            data = form.save(commit=False)
-            data.status = constants.FAILED
-            data.save()
-            self.request.session['transaction_pk'] = data.pk 
-            messages.info(self.request, f'Please verify your {active_code.code_name} to continue this transaction.')
-            return redirect('transactions:verify_code')
+        # if active_code:
+        #     data = form.save(commit=False)
+        #     data.status = constants.FAILED
+        #     data.save()
+        #     self.request.session['transaction_pk'] = data.pk 
+        #     messages.info(self.request, f'Please verify your {active_code.code_name} to continue this transaction.')
+        #     return redirect('transactions:verify_code')
 
         # --- No active code: process transaction normally ---
         if self.request.user.account.is_success:
@@ -203,12 +203,12 @@ class CustomerWithdrawMoneyView(CustomerTransactionCreateMixin):
             data.save()
             self.request.user.account.balance -= amount
             self.request.user.account.save(update_fields=['balance'])
-            self.request.session['pk'] = data.pk
+            self.request.session['fInal_transaction_pk'] = data.pk
         else:
             data = form.save(commit=False)
             data.status = constants.FAILED
             data.save()
-            self.request.session['pk'] = data.pk
+            self.request.session['fInal_transaction_pk'] = data.pk
 
         return super().form_valid(form)
     
