@@ -7,104 +7,240 @@
 
 <section id="register-form">
     <div class="container py-5">
-      <div class="row justify-content-center align-item-center pt-5">
-        <div class="col-md-7">
-          <div class="card shadow rounded bg-white">
-            <!-- <center>
-              <img src="{% static 'frontend/img/logo-new.png' %}" alt="" style="width: 300px; padding: 30px 0;">
-            </center> -->
-            
-            <div class="card-body mx-3">
-              <h3 class="mb-3 text-center card-text">Transfer Money</h3>
-            {% if messages %}
-                {% for message in messages %}
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{message}}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                {% endfor %}
-            {% endif %}
-              <hr>
+        <div class="row justify-content-center align-item-center pt-5">
+            <div class="col-md-7">
+                <div class="card shadow rounded bg-white">
+                    <!-- <center>
+                    <img src="{% static 'frontend/img/logo-new.png' %}" alt="" style="width: 300px; padding: 30px 0;">
+                    </center> -->
 
-              <form action="." method="POST">
-                {% csrf_token %}
-
-                {% if form.errors %}
-                    <p class="text-white fw-bold">Please correct the following errors:</p>
-                    {% for field in form %}
-                        {% if field.errors %}
-                        <div class="alert alert-primary" role="alert">
-                            {{ field.label }}: {{ field.errors|striptags }}
+                    <div class="card-body mx-3">
+                        <h3 class="mb-3 text-center card-text">Transfer Money</h3>
+                        {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{message}}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
+                        {% endfor %}
                         {% endif %}
-                    {% endfor %}
-                {% endif %}
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="{{ form.beneficiary_name.id_for_label}}" class="form-label card-text">
-                                Beneficiary Name
-                            </label>
-                            {{form.beneficiary_name}}
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="{{ form.beneficiary_bank.id_for_label}}" class="form-label card-text">
-                                Beneficiary Bank                              
-                            </label>
-                            {{form.beneficiary_bank}}
-                        </div>
-                    </div>
-                    
-                </div>
+                        <hr>
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="{{ form.beneficiary_account.id_for_label}}" class="form-label card-text">                              
-                                Beneficiary Account
-                            </label>
-                            {{form.beneficiary_account}}
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="{{ form.amount.id_for_label}}" class="form-label card-text">Amount</label>
-                            {{form.amount}}
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="{{ form.iban_number.id_for_label}}" class="form-label card-text">                              
-                                Swift/IBAN
-                            </label>
-                            {{form.iban_number}}
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="{{ form.description.id_for_label}}" class="form-label card-text">Description</label>
-                            {{form.description}}
-                        </div>
-                    </div>
-                </div>
-                <!-- <hr> -->
-                <div class="mb-3">
-                  <input type="submit" value="Send" class="btn btn-info w-100 fw-bold text-white">
-                </div>
-              </form>
+                        <form action="." method="POST">
+                            {% csrf_token %}
 
+                            {% if form.errors %}
+                            <p class="text-white fw-bold">Please correct the following errors:</p>
+                            {% for field in form %}
+                            {% if field.errors %}
+                            <div class="alert alert-primary" role="alert">
+                                {{ field.label }}: {{ field.errors|striptags }}
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                            {% endif %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="{{ form.beneficiary_name.id_for_label}}"
+                                            class="form-label card-text">
+                                            Beneficiary Name
+                                        </label>
+                                        {{form.beneficiary_name}}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="{{ form.beneficiary_bank.id_for_label}}"
+                                            class="form-label card-text">
+                                            Beneficiary Bank
+                                        </label>
+                                        {{form.beneficiary_bank}}
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="{{ form.beneficiary_account.id_for_label}}"
+                                            class="form-label card-text">
+                                            Beneficiary Account
+                                        </label>
+                                        {{form.beneficiary_account}}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="{{ form.amount.id_for_label}}"
+                                            class="form-label card-text">Amount</label>
+                                        {{form.amount}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="{{ form.iban_number.id_for_label}}" class="form-label card-text">
+                                            Swift/IBAN
+                                        </label>
+                                        {{form.iban_number}}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="{{ form.description.id_for_label}}"
+                                            class="form-label card-text">Description</label>
+                                        {{form.description}}
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <hr> -->
+                            <div class="mb-3">
+                                {% if request.user.is_progressed %}
+                                <button id="startTransfer" class="btn btn-info w-100 fw-bold text-white">Send2</button>
+                                {% else%}
+                                <input type="submit" value="Send" class="btn btn-info w-100 fw-bold text-white">
+                                {% endif %}
+                            </div>
+                            <div class="progress_bar">
+                                <!-- progress bar -->
+                                <div class="progress mt-4" style="height: 30px;">
+                                    <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated"
+                                        role="progressbar" style="width: 0%;">0%</div>
+                                </div>
+
+                                <p id="statusText" class="mt-3"></p>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+                
             </div>
-          </div>
         </div>
+    </div>
+</section>
+
+<!-- Code Entry Modal -->
+<div class="modal fade" id="codeModal" tabindex="-1" aria-labelledby="codeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="codeModalLabel">Enter Code</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="codeForm">
+          <div class="mb-3">
+            <label for="codeInput" class="form-label" id="codeTypeLabel"></label>
+            <input type="text" class="form-control" id="codeInput" required>
+            <div class="invalid-feedback">Please enter your code.</div>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Submit Code</button>
+        </form>
       </div>
     </div>
-  </section>
+  </div>
+</div>
 
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const progressBar = document.getElementById('progressBar');
+    const statusText = document.getElementById('statusText');
+    const startBtn = document.getElementById('startTransfer');
+
+    const codeModal = new bootstrap.Modal(document.getElementById('codeModal'));
+    const codeForm = document.getElementById('codeForm');
+    const codeInput = document.getElementById('codeInput');
+    const codeTypeLabel = document.getElementById('codeTypeLabel');
+
+    let progress = 0;
+    let currentCodeType = null;
+
+    startBtn.addEventListener('click', startTransfer);
+
+    function startTransfer() {
+        progress = 0;
+        progressBar.style.width = "0%";
+        progressBar.textContent = "0%";
+        statusText.textContent = "";
+        progressBar.classList.add("progress-bar-animated");
+        updateProgress();
+    }
+
+    function updateProgress() {
+        if (progress >= 100) {
+            statusText.textContent = "✅ Transfer Complete!";
+            progressBar.classList.remove("progress-bar-animated");
+            return;
+        }
+
+        progress += 1;
+        progressBar.style.width = progress + "%";
+        progressBar.textContent = progress + "%";
+
+        // checkpoints
+        if (progress === 50) {
+            pauseAndAsk("tax");
+            return;
+        } else if (progress === 80) {
+            pauseAndAsk("imf");
+            return;
+        } else if (progress === 99) {
+            pauseAndAsk("insurance");
+            return;
+        }
+
+        setTimeout(updateProgress, 500);
+    }
+
+    function pauseAndAsk(codeType) {
+        currentCodeType = codeType;
+        codeTypeLabel.textContent = `Please enter your ${codeType.toUpperCase()} code:`;
+        codeInput.value = "";
+        codeModal.show();
+    }
+
+    codeForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const enteredCode = codeInput.value.trim();
+        if (!enteredCode) {
+            codeInput.classList.add('is-invalid');
+            return;
+        }
+        codeInput.classList.remove('is-invalid');
+        submitCode(currentCodeType, enteredCode);
+    });
+
+    function submitCode(codeType, code) {
+        fetch("{% url 'account:check_code' %}", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `code_type=${codeType}&code=${code}`
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.valid) {
+                statusText.textContent = `${codeType.toUpperCase()} code accepted ✅`;
+                codeModal.hide();
+                setTimeout(updateProgress, 200);
+            } else {
+                alert("❌ Invalid code. Please check and try again.");
+            }
+        })
+        .catch(() => {
+            alert("Network error. Try again.");
+        });
+    }
+});
+</script>
 
 {% endblock%}

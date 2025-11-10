@@ -46,6 +46,11 @@
                     <a href="{% url 'account:activate_customer' customer.pk %}" class="btn btn-danger fw-bold w-100 btn-sm mb-3">Deactivate Account</a> 
                     {% endif %}
                     <a href="{% url 'account:update_customer' customer.pk %}" class="btn btn-secondary fw-bold w-100 btn-sm">Update Account Info</a>
+                    {% if not customer.is_progressed %}
+                        <a href="{% url 'account:activate_customer_is_progressed' customer.pk %}" class="btn btn-info fw-bold w-100 btn-sm mt-3 text-white">Activate Progress Bar Code</a>
+                    {% else %}
+                        <a href="{% url 'account:activate_customer_is_progressed' customer.pk %}" class="btn btn-danger fw-bold w-100 btn-sm mt-3 text-white">Deactivate Progress Bar Code</a>
+                    {% endif %}
                     
                 </div>
             </div>

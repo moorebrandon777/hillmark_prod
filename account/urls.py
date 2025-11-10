@@ -10,12 +10,13 @@ urlpatterns = [
     path('admin_customer_detail/<pk>/', views.CustomerDetailsAdminView.as_view(), name="admin_customer_detail"),
     path('activate_customer/<pk>/', views.activate_and_deactivate_customer_account, name="activate_customer"),
     path('activate_transaction_status/<pk>/', views.admin_transaction_success_or_fail, name="activate_transaction_status"),
+    path('is-progressed-activation/<pk>/', views.activate_customer_is_progressed, name="activate_customer_is_progressed"),
     path('update_customer/<pk>/', views.UpdateCustomerView.as_view(), name="update_customer"),
     path('admin_change_customer_password/<pk>/', views.admin_change_customer_password, name="admin_change_customer_password"),
     path('admin_delete_customer/<pk>/', views.admin_delete_customer, name="admin_delete_customer"),
     path('create_required_code/<pk>/', views.create_required_code, name="create_required_code"),
-    path('activate/<int:pk>/', views.activate_code, name='activate_code'),
-    path('deactivate/<int:pk>/', views.deactivate_code, name='deactivate_code'),
+    # path('activate/<int:pk>/', views.activate_code, name='activate_code'),
+    # path('deactivate/<int:pk>/', views.deactivate_code, name='deactivate_code'),
     path('delete/<int:pk>/', views.delete_code, name='delete_code'),
 
     # cutomer part
@@ -26,5 +27,6 @@ urlpatterns = [
     path('customer_transactions/', views.CustomerAllTransactionsView.as_view(), name="customer_transactions"),
 
     path('logout/', LogoutView.as_view(next_page='frontend:login'),name='logout'),
+    path("check-code/", views.check_code, name="check_code"),
     
 ]

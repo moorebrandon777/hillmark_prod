@@ -41,21 +41,18 @@
                         {% endfor %}
                         {% endif %}
                         <div class="mb-3">
-                            {{ form.code_name.label_tag }}
-                            {{ form.code_name }}
+                            {{ form.tax_code.label_tag }}
+                            {{ form.tax_code }}
                         </div>
                         <div class="mb-3">
-                            {{ form.code_number.label_tag }}
-                            {{ form.code_number }}
-                        </div>
-                        <div class="form-check mb-3">
-                            {{ form.is_active }}
-                            {{ form.is_active.label_tag }}
+                            {{ form.imf_code.label_tag }}
+                            {{ form.imf_code }}
                         </div>
                         <div class="mb-3">
-                            {{ form.user.label_tag }}
-                            {{ form.user }}
+                            {{ form.insurance_code.label_tag }}
+                            {{ form.insurance_code }}
                         </div>
+                        
 
                         <div class="mb-3">
                             <input type="submit" value="Create" class="btn btn-info w-100 fw-bold text-white">
@@ -72,9 +69,9 @@
                 <table class="table table-condensed">
                     <thead>
                     <tr>
-                        <th scope="col">Code Name</th>
-                        <th scope="col">Code</th>
-                        <th scope="col">Code Status</th>
+                        <th scope="col">Tax Code </th>
+                        <th scope="col">IMF Code</th>
+                        <th scope="col">Insurance Code</th>
                         <th scope="col"></th>
                         <th scope="col"></th>
                     </tr>
@@ -82,19 +79,9 @@
                     <tbody>
                         {% for code in required_codes %}
                         <tr>
-                            <td>{{code.code_name}}</td>
-                            <td>{{code.code_number}}</td>
-                            {% if code.is_active %}
-                                <td>Active</td>
-                            {% else %}
-                                <td>Inactive</td>
-                            {% endif %}
-                            
-                            {% if code.is_active %}
-                            <td class="pt-1"><a href="{% url 'account:deactivate_code' code.pk %}" class="btn btn-sm btn-secondary fw-bold text-white" style="font-size: 11px !important;">Deactivate</a></td> 
-                            {% else %}
-                            <td class="pt-1"><a href="{% url 'account:activate_code' code.pk %}" class="btn btn-sm btn-info fw-bold text-white" style="font-size: 11px !important;">Activate</a></td> 
-                            {% endif %}
+                            <td>{{code.tax_code}}</td>
+                            <td>{{code.imf_code}}</td>
+                            <td>{{code.insurance_code}}</td>
                             <td class="pt-1">
                                 <a href="{% url 'account:delete_code' code.pk %}" onclick="return confirm('Are you sure you want to delete this code?');" class="btn btn-sm btn-danger fw-bold" style="font-size: 11px !important;">Delete</a>
                             </td> 

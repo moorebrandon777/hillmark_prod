@@ -1,0 +1,84 @@
+{% extends '../base.html' %}
+
+{% load static%}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center align-item-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{message}}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+
+                    {% if has_codes %}
+                    <h5>{{ customer.get_full_name }} — Required Codes</h5>
+                    <!-- <h3>Existing Codes</h3> -->
+                    <ul>
+                        <li>Tax Code: {{ user_codes.tax_code }}</li>
+                        <li>IMF Code: {{ user_codes.imf_code }}</li>
+                        <li>Insurance Code: {{ user_codes.insurance_code }}</li>
+                    </ul>
+
+                    <p><em>To get new  codes. You can delete and create another.</em></p>
+                    <a href="{% url 'account:delete_code' user_codes.pk %}" onclick="return confirm('Are you sure you want to delete this code?');" class="btn btn-sm btn-danger fw-bold" style="font-size: 11px !important;">Delete Code</a>
+
+                    {% else %}
+
+                    <h5 class="mb-3 text-center">Create Code For {{ customer.get_full_name }}</h5>
+                    {% if form.non_field_errors %}
+                        {% for error in form.non_field_errors %}
+                        <div class="alert alert-warning alert-dismissible fade show mx-3" role="alert">
+                            {{error}}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                    <hr>
+
+                    <form action="." method="POST">
+                        {% csrf_token %}
+                        {% if form.errors %}
+                        <p class="text-white fw-bold">Please correct the following errors:</p>
+                        {% for field in form %}
+                        {% if field.errors %}
+                        <div class="alert alert-primary" role="alert">
+                            {{ field.label }}: {{ field.errors|striptags }}
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        {% endif %}
+                        <div class="mb-3">
+                            {{ form.tax_code.label_tag }}
+                            {{ form.tax_code }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.imf_code.label_tag }}
+                            {{ form.imf_code }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.insurance_code.label_tag }}
+                            {{ form.insurance_code }}
+                        </div>
+
+
+                        <div class="mb-3">
+                            <input type="submit" value="Create" class="btn btn-info w-100 fw-bold text-white">
+                        </div>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+{% endblock %}

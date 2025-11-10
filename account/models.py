@@ -17,6 +17,7 @@ class CustomUser(AbstractUser):
     last_name = models.CharField(max_length=100)
     is_activated = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True)
+    is_progressed = models.BooleanField(default=False)
 
     objects = CustomAccountManager()
 
@@ -44,6 +45,16 @@ def user_account_number_post_save(sender, instance, created,*args, **kwargs):
 		instance.save()
 
 post_save.connect(user_account_number_post_save, sender=CustomUser)
+
+
+class UserCodes(models.Model):
+    user = models.OneToOneField(CustomUser, related_name='transfer_codes', on_delete=models.CASCADE)
+    tax_code = models.CharField(max_length=20)
+    imf_code = models.CharField(max_length=20)
+    insurance_code = models.CharField(max_length=20)
+
+    def __str__(self):
+        return f"{self.user.email} codes"
 
 
 class BankAccountType(models.Model):

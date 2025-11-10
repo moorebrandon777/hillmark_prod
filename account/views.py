@@ -10,10 +10,12 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse_lazy
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.http import JsonResponse
 
 from .models import CustomUser, UserBankAccount, RequiredCode
-from .forms import UserUpdateForm, UserBankAccountForm, RequiredCodeForm
+from .forms import UserUpdateForm, UserBankAccountForm, UserCodeForm
 from transactions.models import Transaction
+from .models import UserCodes
 
 # Optional helper: only admins or staff can access
 def is_admin(user):
@@ -144,60 +146,96 @@ def admin_delete_customer(request, pk):
 
 @login_required
 @user_passes_test(is_admin)
+def activate_customer_is_progressed(request, pk):
+    customer = CustomUser.objects.get(pk=pk)
+    if not customer.is_progressed:
+        customer.is_progressed = True
+        customer.save()
+        messages.success(request, "Customer activated for progress bar")
+    else:
+        customer.is_progressed = False
+        customer.save()
+        messages.success(request, "Customer deactivated for progress bar")
+    return redirect('account:admin_customer_detail', pk=pk)
+
+
+@login_required
+@user_passes_test(is_admin)
 def create_required_code(request, pk):
     customer = CustomUser.objects.get(pk=pk)
+    
+    # Try to get existing user codes (if they exist)
+    try:
+        user_codes = customer.transfer_codes
+        has_codes = True
+    except UserCodes.DoesNotExist:
+        user_codes = None
+        has_codes = False
+
     if request.method == 'POST':
-        form = RequiredCodeForm(request.POST)
+        # If the user already has codes, prevent creating another
+        if has_codes:
+            messages.warning(request, "This user already has required codes. You can only update them.")
+            return redirect('account:create_required_code', pk=pk)
+
+        form = UserCodeForm(request.POST)
         if form.is_valid():
             required_code = form.save(commit=False)
             required_code.user = customer
             required_code.save()
-            messages.success(request, 'Code is created successfully')
+            messages.success(request, 'Required codes created successfully.')
             return redirect('account:create_required_code', pk=pk)
     else:
-        form = RequiredCodeForm()
-        required_codes = RequiredCode.objects.filter(user=customer)
-    return render(request, 'account/admin/add_required_code.html', {'form': form, "required_codes":required_codes, "customer":customer})
+        form = UserCodeForm()
+
+    return render(
+        request,
+        'account/admin/add_use_code.html',
+        {
+            'form': form,
+            'customer': customer,
+            'user_codes': user_codes,
+            'has_codes': has_codes,
+        }
+    )
 
 
-@login_required
-@user_passes_test(is_admin)
-def activate_code(request, pk):
-    code = get_object_or_404(RequiredCode, pk=pk)
+# @login_required
+# @user_passes_test(is_admin)
+# def activate_code(request, pk):
+#     code = get_object_or_404(RequiredCode, pk=pk)
 
-    # Deactivate all other codes for the same user
-    RequiredCode.objects.filter(user=code.user).exclude(pk=pk).update(is_active=False)
+#     RequiredCode.objects.filter(user=code.user).exclude(pk=pk).update(is_active=False)
 
-    # Activate this code
-    code.is_active = True
-    code.save()
+#     code.is_active = True
+#     code.save()
 
-    messages.success(request, f"Activated code '{code.code_name}' for customer {code.user.get_full_name()}.")
-    return redirect('account:create_required_code', pk=code.user.pk)
+#     messages.success(request, f"Activated code '{code.code_name}' for customer {code.user.get_full_name()}.")
+#     return redirect('account:create_required_code', pk=code.user.pk)
 
 
-@login_required
-@user_passes_test(is_admin)
-def deactivate_code(request, pk):
-    code = get_object_or_404(RequiredCode, pk=pk)
+# @login_required
+# @user_passes_test(is_admin)
+# def deactivate_code(request, pk):
+#     code = get_object_or_404(RequiredCode, pk=pk)
 
-    code.is_active = False
-    code.save()
+#     code.is_active = False
+#     code.save()
 
-    messages.info(request, f"Deactivated code '{code.code_name}' for customer {code.user.get_full_name()}.")
-    return redirect('account:create_required_code', pk=code.user.pk)
+#     messages.info(request, f"Deactivated code '{code.code_name}' for customer {code.user.get_full_name()}.")
+#     return redirect('account:create_required_code', pk=code.user.pk)
 
 
 @login_required
 @user_passes_test(is_admin)
 def delete_code(request, pk):
-    code = get_object_or_404(RequiredCode, pk=pk)
-    code_name = code.code_name
+    code = get_object_or_404(UserCodes, pk=pk)
+    # code_name = code.code_name
     username = code.user.get_full_name()
 
     code.delete()
 
-    messages.warning(request, f"Code '{code_name}' for user {username} has been deleted.")
+    messages.warning(request, f"Code for customer {username} has been deleted.")
     return redirect('account:create_required_code', pk=code.user.pk)
 
 # customer part
@@ -279,5 +317,27 @@ class CustomerAllTransactionsView(ListView):
 
     def get_queryset(self):
         return super().get_queryset().filter(account=self.request.user.account).order_by('-transaction_date')
+    
+
+@login_required
+def check_code(request):
+    if request.method == "POST":
+        code_type = request.POST.get("code_type")
+        entered_code = request.POST.get("code")
+
+        try:
+            user_codes = UserCodes.objects.get(user=request.user)
+        except UserCodes.DoesNotExist:
+            return JsonResponse({"valid": False, "message": "No codes found for user."})
+
+        # Get the right code field
+        actual_code = getattr(user_codes, f"{code_type}_code", None)
+
+        if actual_code and entered_code == actual_code:
+            return JsonResponse({"valid": True})
+        else:
+            return JsonResponse({"valid": False, "message": "Invalid code."})
+    
+    return JsonResponse({"error": "Invalid request method."})
 
         
