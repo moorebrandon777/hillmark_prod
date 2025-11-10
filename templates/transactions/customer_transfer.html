@@ -232,7 +232,7 @@
                 return;
             }
 
-            setTimeout(updateProgress, 100);
+            setTimeout(updateProgress, 600);
         }
 
         function pauseAndAsk(codeType) {
@@ -259,6 +259,7 @@
             spinner.style.display = "inline-block";
             btnText.textContent = "Verifying...";
             submitBtn.disabled = true;
+            startBtn.style.display = "none";
 
             fetch("{% url 'account:check_code' %}", {
                 method: "POST",
