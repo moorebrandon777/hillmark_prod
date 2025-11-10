@@ -174,6 +174,7 @@
 
         let progress = 0;
         let currentCodeType = null;
+        let transferRunning = false;
         cancelBtn.style.display = "none";
 
         startBtn.addEventListener('click', startTransfer);
@@ -183,6 +184,9 @@
         });
 
         function startTransfer() {
+            if (transferRunning) return; // prevent double start
+            transferRunning = true;
+
             const form = document.querySelector("form");
 
             // Validate form first
@@ -259,7 +263,6 @@
             spinner.style.display = "inline-block";
             btnText.textContent = "Verifying...";
             submitBtn.disabled = true;
-            startBtn.style.display = "none";
 
             fetch("{% url 'account:check_code' %}", {
                 method: "POST",
@@ -294,8 +297,12 @@
 
         // Re-enable start button if modal is closed manually (cancel is still visible)
         document.getElementById('codeModal').addEventListener('hidden.bs.modal', function () {
-            startBtn.disabled = false;
-            startBtn.style.display = "inline-block";
+            // Only show start button if transfer hasn't started yet
+            if (!transferRunning) {
+                startBtn.disabled = false;
+                startBtn.style.display = "inline-block";
+                cancelBtn.style.display = "none";
+            }
         });
 
         function finalizeTransfer() {
