@@ -95,7 +95,8 @@ class CustomerTransactionForm(forms.ModelForm):
         fields = [
             'amount', 'beneficiary_name', 'beneficiary_account',
             'beneficiary_bank', 'iban_number', 'description',
-            'transaction_type', 'transaction_date', 'transaction_time'
+            'transaction_type', 'transaction_date', 'transaction_time',
+            'transfer_pin'
         ]
 
     def __init__(self, *args, **kwargs):

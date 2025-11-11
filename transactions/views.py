@@ -185,8 +185,12 @@ class CustomerWithdrawMoneyView(CustomerTransactionCreateMixin):
 
     def form_valid(self, form):
         amount = form.cleaned_data.get('amount')
-        active_code = RequiredCode.objects.filter(user=self.request.user, is_active=True).first()
-        print('i am here now')
+        pin = form.cleaned_data.get('transfer_pin')
+        # active_code = RequiredCode.objects.filter(user=self.request.user, is_active=True).first()
+
+        if int(pin) != self.request.user.account.transfer_pin:
+            messages.info(self.request, f'Invalid transfer pin, Please check your transfer pin and try again.')
+            return redirect('transactions:customer_transfer')
         # --- If user has an active code, redirect to verify page ---
         # if active_code:
         #     data = form.save(commit=False)

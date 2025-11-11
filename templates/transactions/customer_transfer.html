@@ -92,9 +92,9 @@
 
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="{{ form.description.id_for_label}}"
-                                            class="form-label card-text">Description</label>
-                                        {{form.description}}
+                                        <label for="{{ form.transfer_pin.id_for_label}}"
+                                            class="form-label card-text">Transfer Pin</label>
+                                        {{form.transfer_pin}}
                                     </div>
                                 </div>
                             </div>
@@ -146,10 +146,11 @@
             <div class="invalid-feedback">Please enter your code.</div>
             <div id="errorMessage" class="text-danger mt-2" style="display:none;">Invalid code. Try again.</div>
           </div>
-          <button type="submit" class="btn btn-primary w-100" id="submitBtn">
+          <button type="submit" class="btn btn-primary w-50" id="submitBtn">
             <span class="btn-text">Submit Code</span>
             <span class="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true" style="display:none;"></span>
           </button>
+          <button type="button" id="cancelCodeInput" class="btn btn-danger fw-bold ms-2" style="flex: 1;">Cancel</button>
         </form>
       </div>
     </div>
@@ -162,6 +163,7 @@
         const statusText = document.getElementById('statusText');
         const startBtn = document.getElementById('startTransfer');
         const cancelBtn = document.getElementById("cancelTransfer");
+        const cancelCodeBtn = document.getElementById("cancelCodeInput");
 
         const codeModal = new bootstrap.Modal(document.getElementById('codeModal'));
         const codeForm = document.getElementById('codeForm');
@@ -180,6 +182,10 @@
         startBtn.addEventListener('click', startTransfer);
 
         cancelBtn.addEventListener("click", function () {
+            window.location.reload(); // cancel everything safely
+        });
+
+        cancelCodeBtn.addEventListener("click", function () {
             window.location.reload(); // cancel everything safely
         });
 

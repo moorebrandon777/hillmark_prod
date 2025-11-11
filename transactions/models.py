@@ -21,6 +21,7 @@ class Transaction(models.Model):
 	transaction_date = models.DateField(null=True)
 	transaction_time = models.TimeField(null=True)
 	email_sent = models.BooleanField(default=False)
+	transfer_pin = models.IntegerField()
 
 	class Meta:
 		ordering = ['-transaction_date', '-transaction_time']
