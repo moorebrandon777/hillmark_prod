@@ -21,7 +21,7 @@ import cloudinary.api
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["127.0.0.1", ".vercel.app", ".now.sh", 'localhost', 'www.hmb-online.com', 'hmb-online.com']
 
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     # external apps
     'cloudinary',
     'django.contrib.humanize',
+    'captcha',
 
     # my apps
     'frontend',
@@ -190,3 +191,34 @@ LOGGING = {
     },
 }
 
+
+CAPTCHA_LENGTH = 7
+
+# Image size (width, height)
+# CAPTCHA_IMAGE_SIZE = (220, 50)
+
+# Font size of letters
+CAPTCHA_FONT_SIZE = 30
+
+# Add noise to make bots harder
+# CAPTCHA_NOISE_FUNCTIONS = ('captcha.helpers.noise_dots',)
+# Heavy noise
+CAPTCHA_NOISE_FUNCTIONS = (
+    'captcha.helpers.noise_arcs',
+    'captcha.helpers.noise_dots',
+)
+
+# Add random background noise
+CAPTCHA_BACKGROUND_COLOR = '#f5f5f5'
+
+# Optional: rotate letters slightly
+# CAPTCHA_LETTER_ROTATION = (-20, 20)
+
+CAPTCHA_FOREGROUND_COLOR = '#000000'
+CAPTCHA_LETTER_ROTATION = (-40, 40)
+CAPTCHA_IMAGE_SIZE = (260, 70)
+
+CAPTCHA_TIMEOUT = 5
+
+# Make characters harder to guess
+CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge'

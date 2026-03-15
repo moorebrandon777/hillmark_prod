@@ -1,11 +1,9 @@
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import get_user_model
+from captcha.fields import CaptchaField
 from django import forms
 
 from .models import UserBankAccount, RequiredCode, UserCodes
-
-
-
 
 class UserLoginForm(AuthenticationForm):
     username = forms.CharField(label='Acc.-No. Or Email')
@@ -18,9 +16,11 @@ class UserLoginForm(AuthenticationForm):
 
 
 class UserRegisterForm(UserCreationForm):
+    captcha = CaptchaField()
+
     class Meta:
         model = get_user_model()
-        fields = ('email', 'first_name', 'last_name', 'password1', 'password2')
+        fields = ('email', 'first_name', 'last_name', 'password1', 'password2', 'captcha')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
